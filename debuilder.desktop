@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=VERSION
+Name=Debian Package Builder
+Name[zh_CN]=Debian 包构建工具
+Comment=Construct a simple deb package
+Comment[zh_CN]=构建一个简单的 deb 包
+Categories=Application;System;Utils
+Exec=/opt/kylin-utils/bin/debuilder
+Icon=/opt/kylin-utils/share/debuilder/logo.png
+StartupNotify=false
+X-MultipleArgs=false
+Terminal=false
+Type=Application

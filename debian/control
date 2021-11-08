@@ -1,0 +1,9 @@
+Package: debuilder
+Version: VERSION
+Architecture: ARCHITECTURE
+Maintainer: Wang Hong <kuletco@qq.com>
+Installed-Size: 1516
+Depends: libc6, libstdc++6, libqt5core5a, libqt5widgets5, libqt5gui5
+Section: utils
+Priority: optional
+Description: Construct a simple deb package
