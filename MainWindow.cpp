@@ -68,12 +68,22 @@ void MainWindow::worker_finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     if (exitCode == 0 && exitStatus == QProcess::NormalExit) {
         ui->statusbar->showMessage(tr("Done. File saved to ") + m_filename);
-        QDir temp(m_tempdir);
-        temp.removeRecursively();
     } else {
-        qDebug().noquote() << "Exit:" << exitCode << exitStatus;
-        ui->statusbar->showMessage(tr("Error: ") + m_worker->errorString());
+        QString errstr;
+        if (exitStatus != QProcess::NormalExit) {
+            errstr = m_worker->errorString().trimmed();
+        }
+        if (errstr.isEmpty()) {
+            errstr = m_worker->readAllStandardError().trimmed();
+            if (errstr.isEmpty()) {
+                errstr = m_worker->readAllStandardOutput().trimmed();
+            }
+        }
+        qDebug().noquote() << "Exit:" << exitCode << exitStatus << "Error:" << errstr;
+        ui->statusbar->showMessage(tr("Error: ") + errstr);
     }
+    QDir temp(m_tempdir);
+    temp.removeRecursively();
 }
 
 void MainWindow::worker_error(QProcess::ProcessError error)
