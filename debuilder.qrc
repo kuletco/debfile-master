@@ -1,6 +1,13 @@
 <RCC>
     <qresource prefix="/icons">
-        <file alias="logo">logo.png</file>
+        <file alias="logo">resources/logo.png</file>
+    </qresource>
+    <qresource prefix="/icons/toolbar">
+        <file alias="dir-add">resources/toolbar/dir-add.png</file>
+        <file alias="dir-del">resources/toolbar/dir-del.png</file>
+        <file alias="file-add">resources/toolbar/file-add.png</file>
+        <file alias="file-del">resources/toolbar/file-del.png</file>
+        <file alias="trash">resources/toolbar/trash.png</file>
     </qresource>
     <qresource prefix="/i18n">
         <file alias="zh_CN">debuilder.zh_CN.qm</file>

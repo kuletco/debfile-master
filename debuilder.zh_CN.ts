@@ -237,7 +237,8 @@
     </message>
     <message>
         <location filename="MainWindow.ui" line="413"/>
-        <source>Home page </source>
+        <source>Home page</source>
+        <oldsource>Home page </oldsource>
         <translation>主页</translation>
     </message>
     <message>
@@ -282,7 +283,67 @@
         <translation>卸载后执行</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="723"/>
+        <location filename="MainWindow.ui" line="697"/>
+        <source>Files</source>
+        <translation>文件</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="708"/>
+        <source>Create entry based root path.</source>
+        <translation>创建基于根目录的路径。</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="715"/>
+        <source>Create</source>
+        <translation>创建</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="735"/>
+        <source>Import folders or files to current path.</source>
+        <translation>导入文件夹或文件到当前路径。</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="742"/>
+        <source>Import</source>
+        <translation>导入</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="762"/>
+        <source>Remove folders or files from current path.</source>
+        <translation>移除当前路径中的文件夹或文件。</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="769"/>
+        <source>Remove</source>
+        <translation>移除</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="805"/>
+        <source>Entries</source>
+        <translation>路径</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="810"/>
+        <source>Type</source>
+        <translation>类型</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="815"/>
+        <source>Size</source>
+        <translation>大小</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="820"/>
+        <source>Attribute</source>
+        <translation>属性</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="855"/>
+        <source>Start Build</source>
+        <translation>开始构建</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="858"/>
         <source>Build</source>
         <translation>构建</translation>
     </message>
@@ -297,52 +358,52 @@
         <translation>完成。文件保存为: </translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="75"/>
-        <location filename="MainWindow.cpp" line="84"/>
+        <location filename="MainWindow.cpp" line="83"/>
+        <location filename="MainWindow.cpp" line="94"/>
         <source>Error: </source>
         <translation>错误: </translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="114"/>
+        <location filename="MainWindow.cpp" line="124"/>
         <source>Package name is empty!</source>
         <translation>软件包名称未设置！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="119"/>
+        <location filename="MainWindow.cpp" line="129"/>
         <source>Package version is empty!</source>
         <translation>软件包版本未设置！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="124"/>
+        <location filename="MainWindow.cpp" line="134"/>
         <source>Invalid architecture!</source>
         <translation>无效的架构！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="129"/>
+        <location filename="MainWindow.cpp" line="139"/>
         <source>Package summary is empty!</source>
         <translation>软件包简介未设置！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="134"/>
+        <location filename="MainWindow.cpp" line="144"/>
         <source>Invalid package type!</source>
         <translation>无效的软件包类型！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="140"/>
+        <location filename="MainWindow.cpp" line="150"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="140"/>
+        <location filename="MainWindow.cpp" line="150"/>
         <source>Debian Package (*.deb *.udeb)</source>
         <translation>Debian 软件包 (*.deb *.udeb)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="191"/>
-        <location filename="MainWindow.cpp" line="202"/>
-        <location filename="MainWindow.cpp" line="221"/>
-        <location filename="MainWindow.cpp" line="240"/>
-        <location filename="MainWindow.cpp" line="259"/>
+        <location filename="MainWindow.cpp" line="201"/>
+        <location filename="MainWindow.cpp" line="212"/>
+        <location filename="MainWindow.cpp" line="231"/>
+        <location filename="MainWindow.cpp" line="250"/>
+        <location filename="MainWindow.cpp" line="269"/>
         <source>Open file %1 failed!</source>
         <translation>打开文件 %1 失败！</translation>
     </message>

@@ -410,7 +410,7 @@ QLabel { image: url(:/icons/logo); }</string>
           <item row="2" column="3" colspan="3">
            <widget class="QLineEdit" name="LE_HomePage">
             <property name="placeholderText">
-             <string>Home page </string>
+             <string>Home page</string>
             </property>
            </widget>
           </item>
@@ -692,6 +692,138 @@ QLabel { image: url(:/icons/logo); }</string>
           </item>
          </layout>
         </widget>
+        <widget class="QWidget" name="tab_files">
+         <attribute name="title">
+          <string>Files</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <layout class="QHBoxLayout" name="HL_FilesToolbar">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <item>
+             <widget class="QToolButton" name="TB_Add_Dir">
+              <property name="toolTip">
+               <string>Create entry based root path.</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">
+QToolButton { border: none; }</string>
+              </property>
+              <property name="text">
+               <string>Create</string>
+              </property>
+              <property name="icon">
+               <iconset resource="debuilder.qrc">
+                <normaloff>:/icons/toolbar/dir-add</normaloff>:/icons/toolbar/dir-add</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextBesideIcon</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="TB_Add_File">
+              <property name="toolTip">
+               <string>Import folders or files to current path.</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">
+QToolButton { border: none; }</string>
+              </property>
+              <property name="text">
+               <string>Import</string>
+              </property>
+              <property name="icon">
+               <iconset resource="debuilder.qrc">
+                <normaloff>:/icons/toolbar/file-add</normaloff>:/icons/toolbar/file-add</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextBesideIcon</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="TB_Remove">
+              <property name="toolTip">
+               <string>Remove folders or files from current path.</string>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">
+QToolButton { border: none; }</string>
+              </property>
+              <property name="text">
+               <string>Remove</string>
+              </property>
+              <property name="icon">
+               <iconset resource="debuilder.qrc">
+                <normaloff>:/icons/toolbar/trash</normaloff>:/icons/toolbar/trash</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextBesideIcon</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="HS_FilesToolbar">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QTreeWidget" name="treeWidget_Files">
+            <column>
+             <property name="text">
+              <string>Entries</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Type</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Size</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Attribute</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -718,6 +850,9 @@ QLabel { image: url(:/icons/logo); }</string>
           <width>150</width>
           <height>40</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Start Build</string>
         </property>
         <property name="text">
          <string>Build</string>
@@ -755,7 +890,7 @@ QLabel { image: url(:/icons/logo); }</string>
   <tabstop>TE_PostRM</tabstop>
  </tabstops>
  <resources>
-  <include location="debmaker.qrc"/>
+  <include location="debuilder.qrc"/>
  </resources>
  <connections/>
 </ui>
