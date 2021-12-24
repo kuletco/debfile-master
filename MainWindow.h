@@ -74,10 +74,18 @@ public:
 protected:
     void keyReleaseEvent(QKeyEvent *e);
 
+private:
+    void initTempDir();
+    bool updateInfo();
+    bool genControlFile();
+    bool genScriptFile(const QString &scriptfile, const QString &contents);
+
 private slots:
     void worker_started();
     void worker_finished(int exitCode, QProcess::ExitStatus exitStatus = QProcess::NormalExit);
     void worker_error(QProcess::ProcessError error);
+
+    // UI Slots
     void on_PB_Build_clicked();
 
 private:
@@ -86,6 +94,8 @@ private:
     QProcess *m_worker;
 
     QString m_tempdir;
+    QString m_debiandir;
+    QString m_controlfile;
     QString m_filename;
 
     QString m_name;
@@ -105,9 +115,9 @@ private:
     Priority m_priority;
     Section m_section;
 
-    QString m_preinst;
-    QString m_postinst;
-    QString m_prerm;
-    QString m_postrm;
+    QString m_contents_preinst;
+    QString m_contents_postinst;
+    QString m_contents_prerm;
+    QString m_contents_postrm;
 };
 #endif // MAINWINDOW_H

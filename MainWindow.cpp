@@ -58,6 +58,161 @@ void MainWindow::keyReleaseEvent(QKeyEvent *e)
     }
 }
 
+void MainWindow::initTempDir()
+{
+    char tempname[] = "DEBMAKER.XXXXXX";
+    if (m_tempdir.isEmpty()) {
+        if (!mkdtemp(tempname)) {
+            qWarning().noquote() << "Cannot create a uniquely-named tempdir!";
+        }
+        m_tempdir = tempname;
+    }
+    QDir temp(tempname);
+    if (!temp.exists()) {
+        temp.mkpath("DEBIAN");
+    }
+    m_debiandir = temp.absoluteFilePath("DEBIAN");
+}
+
+bool MainWindow::updateInfo()
+{
+    // Get all settings from UI
+    m_name = ui->LE_Package->text();
+    m_version = ui->LE_Version->text();
+    m_maintainer = ui->LE_Maintainer->text();
+    m_homepage = ui->LE_HomePage->text();
+    m_summary = ui->LE_Summary->text();
+    m_description = ui->TE_Description->toPlainText();
+    m_depends = ui->LE_Depends->text();
+    m_predepends = ui->LE_PreDepends->text();
+    m_conflicts = ui->LE_Conflicts->text();
+    m_replaces = ui->LE_Replaces->text();
+    m_provides = ui->LE_Provides->text();
+    m_protected = ui->CB_Protected->isChecked();
+    m_type = static_cast<Type>(ui->ComboBox_PackageType->currentIndex());
+    m_architecture = static_cast<Architecture>(ui->ComboBox_Arch->currentIndex());
+    m_priority = static_cast<Priority>(ui->ComboBox_Priority->currentIndex());
+    m_section = static_cast<Section>(ui->ComboBox_Section->currentIndex());
+    m_contents_preinst = ui->TE_PreInst->toPlainText();
+    m_contents_postinst = ui->TE_PostInst->toPlainText();
+    m_contents_prerm = ui->TE_PreRM->toPlainText();
+    m_contents_postrm = ui->TE_PostRM->toPlainText();
+
+    if (m_name.isEmpty()) {
+        ui->statusbar->showMessage(tr("Package name is empty!"));
+        return false;
+    }
+
+    if (m_version.isEmpty()) {
+        ui->statusbar->showMessage(tr("Package version is empty!"));
+        return false;
+    }
+
+    if (m_architecture == Architecture::invalid) {
+        ui->statusbar->showMessage(tr("Invalid architecture!"));
+        return false;
+    }
+
+    if (m_summary.isEmpty()) {
+        ui->statusbar->showMessage(tr("Package summary is empty!"));
+        return false;
+    }
+
+    if (m_type == Type::invalid) {
+        ui->statusbar->showMessage(tr("Invalid package type!"));
+        return false;
+    }
+
+    // Popup a dialog to save deb file
+    QString filename = QString("%1_%2_%3.%4").arg(m_name, m_version, Utils::EnumConvert(m_architecture), Utils::EnumConvert(m_type));
+    m_filename = QFileDialog::getSaveFileName(this, tr("Save File"), QDir::homePath() + "/" + filename, tr("Debian Package (*.deb *.udeb)"));
+    qDebug().noquote() << "Package File:" << m_filename;
+
+    return true;
+}
+
+bool MainWindow::genControlFile()
+{
+    QStringList contents;
+    contents << QString("Package: %1").arg(m_name);
+    contents << QString("Version: %1").arg(m_version);
+    contents << QString("Size: 100");
+    if (m_architecture != Architecture::invalid)
+        contents << QString("Architecture: %1").arg(Utils::EnumConvert(m_architecture).constData());
+    if (m_section != Section::invalid)
+        contents << QString("Section: %1").arg(Utils::EnumConvert(m_section).constData());
+    if (m_priority != Priority::invalid)
+        contents << QString("Priority: %1").arg(Utils::EnumConvert(m_priority).constData());
+    if (m_protected)
+        contents << QString("Protected: yes");
+    if (!m_maintainer.isEmpty())
+        contents << QString("Maintainer: %1").arg(m_maintainer);
+    if (!m_homepage.isEmpty())
+        contents << QString("Homepage: %1").arg(m_homepage);
+    if (!m_predepends.isEmpty())
+        contents << QString("Pre-Depends: %1").arg(m_predepends);
+    if (!m_depends.isEmpty())
+        contents << QString("Depends: %1").arg(m_depends);
+    if (!m_conflicts.isEmpty())
+        contents << QString("Conflicts: %1").arg(m_conflicts);
+    if (!m_replaces.isEmpty())
+        contents << QString("Replaces: %1").arg(m_replaces);
+    if (!m_provides.isEmpty())
+        contents << QString("Provides: %1").arg(m_provides);
+    if (!m_summary.isEmpty())
+        contents << QString("Description: %1").arg(m_summary);
+    // TODO: Need format long-description contents (https://manpages.debian.org/testing/dpkg-dev/deb-control.5.en.html#Description:)
+    if (!m_description.isEmpty())
+        contents << QString(" %1").arg(m_description);
+
+    contents << "";
+
+    QString control_file = Utils::BuildPath({m_debiandir, "control"});
+    QFile file(control_file);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        ui->statusbar->showMessage(QString(tr("Open file %1 failed!")).arg(control_file));
+        return false;
+    }
+    qDebug().noquote() << "Write:" << file.write(contents.join("\n").toUtf8()) << "Bytes to" << control_file;
+    file.flush();
+    file.close();
+
+    return true;
+}
+
+bool MainWindow::genScriptFile(const QString &scriptfile, const QString &contents)
+{
+    if (scriptfile.isEmpty()) {
+        qCritical().noquote() << "Error: Empty of script file path!";
+        return false;
+    }
+
+    if (contents.isEmpty()) {
+        qInfo().noquote() << "Info: Empty of script contents!";
+        return true;
+    }
+
+    QString writeable_contents = contents;
+    QFile file(scriptfile);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qCritical().noquote() << "Error:" << QString("Open file %1 failed!").arg(scriptfile);
+        ui->statusbar->showMessage(QString(tr("Open file %1 failed!")).arg(scriptfile));
+        return false;
+    }
+    if (!writeable_contents.endsWith("\n")) {
+        writeable_contents.append('\n');
+    }
+    qDebug().noquote() << "Write:" << file.write(writeable_contents.toUtf8()) << "Bytes to" << scriptfile;
+    // Set permission 0755
+    file.setPermissions(QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser |
+                        QFileDevice::ReadGroup | QFileDevice::ExeGroup |
+                        QFileDevice::ReadOther | QFileDevice::ExeOther);
+    file.flush();
+    file.close();
+
+    return true;
+}
+
 void MainWindow::worker_started()
 {
     qDebug().noquote() << m_worker->program() << m_worker->arguments();
@@ -94,191 +249,39 @@ void MainWindow::worker_error(QProcess::ProcessError error)
     ui->statusbar->showMessage(tr("Error: ") + m_worker->errorString());
 }
 
+// UI Slots
 void MainWindow::on_PB_Build_clicked()
 {
     ui->statusbar->clearMessage();
 
-    // Get all settings from UI
-    m_name = ui->LE_Package->text();
-    m_version = ui->LE_Version->text();
-    m_maintainer = ui->LE_Maintainer->text();
-    m_homepage = ui->LE_HomePage->text();
-    m_summary = ui->LE_Summary->text();
-    m_description = ui->TE_Description->toPlainText();
-    m_depends = ui->LE_Depends->text();
-    m_predepends = ui->LE_PreDepends->text();
-    m_conflicts = ui->LE_Conflicts->text();
-    m_replaces = ui->LE_Replaces->text();
-    m_provides = ui->LE_Provides->text();
-    m_protected = ui->CB_Protected->isChecked();
-    m_type = static_cast<Type>(ui->ComboBox_PackageType->currentIndex());
-    m_architecture = static_cast<Architecture>(ui->ComboBox_Arch->currentIndex());
-    m_priority = static_cast<Priority>(ui->ComboBox_Priority->currentIndex());
-    m_section = static_cast<Section>(ui->ComboBox_Section->currentIndex());
-    m_preinst = ui->TE_PreInst->toPlainText();
-    m_postinst = ui->TE_PostInst->toPlainText();
-    m_prerm = ui->TE_PreRM->toPlainText();
-    m_postrm = ui->TE_PostRM->toPlainText();
-
-    if (m_name.isEmpty()) {
-        ui->statusbar->showMessage(tr("Package name is empty!"));
+    if (!updateInfo()) {
         return;
     }
-
-    if (m_version.isEmpty()) {
-        ui->statusbar->showMessage(tr("Package version is empty!"));
-        return;
-    }
-
-    if (m_architecture == Architecture::invalid) {
-        ui->statusbar->showMessage(tr("Invalid architecture!"));
-        return;
-    }
-
-    if (m_summary.isEmpty()) {
-        ui->statusbar->showMessage(tr("Package summary is empty!"));
-        return;
-    }
-
-    if (m_type == Type::invalid) {
-        ui->statusbar->showMessage(tr("Invalid package type!"));
-        return;
-    }
-
-    // Popup a dialog to save deb file
-    QString filename = QString("%1_%2_%3.%4").arg(m_name, m_version, Utils::EnumConvert(m_architecture), Utils::EnumConvert(m_type));
-    m_filename = QFileDialog::getSaveFileName(this, tr("Save File"), QDir::homePath() + "/" + filename, tr("Debian Package (*.deb *.udeb)"));
-    qDebug().noquote() << "Package File:" << m_filename;
 
     // Construct build entries
-    char tempname[] = "DEBMAKER.XXXXXX";
-    if (!mkdtemp(tempname)) {
-        qWarning().noquote() << "Cannot create a uniquely-named tempdir!";
+    if (QFileInfo::exists(m_debiandir)) {
+        initTempDir();
     }
-    m_tempdir = tempname;
-    QDir temp(tempname);
-    temp.mkpath("DEBIAN");
-    QString debian_dir = temp.absoluteFilePath("DEBIAN");
 
     // Generate control files
-    QStringList control_file_contents;
-    control_file_contents << QString("Package: %1").arg(m_name);
-    control_file_contents << QString("Version: %1").arg(m_version);
-    control_file_contents << QString("Size: 100");
-    if (m_architecture != Architecture::invalid)
-        control_file_contents << QString("Architecture: %1").arg(Utils::EnumConvert(m_architecture).constData());
-    if (m_section != Section::invalid)
-        control_file_contents << QString("Section: %1").arg(Utils::EnumConvert(m_section).constData());
-    if (m_priority != Priority::invalid)
-        control_file_contents << QString("Priority: %1").arg(Utils::EnumConvert(m_priority).constData());
-    if (m_protected)
-        control_file_contents << QString("Protected: yes");
-    if (!m_maintainer.isEmpty())
-        control_file_contents << QString("Maintainer: %1").arg(m_maintainer);
-    if (!m_homepage.isEmpty())
-        control_file_contents << QString("Homepage: %1").arg(m_homepage);
-    if (!m_predepends.isEmpty())
-        control_file_contents << QString("Pre-Depends: %1").arg(m_predepends);
-    if (!m_depends.isEmpty())
-        control_file_contents << QString("Depends: %1").arg(m_depends);
-    if (!m_conflicts.isEmpty())
-        control_file_contents << QString("Conflicts: %1").arg(m_conflicts);
-    if (!m_replaces.isEmpty())
-        control_file_contents << QString("Replaces: %1").arg(m_replaces);
-    if (!m_provides.isEmpty())
-        control_file_contents << QString("Provides: %1").arg(m_provides);
-    if (!m_summary.isEmpty())
-        control_file_contents << QString("Description: %1").arg(m_summary);
-    // TODO: Need format long-description contents (https://manpages.debian.org/testing/dpkg-dev/deb-control.5.en.html#Description:)
-    if (!m_description.isEmpty())
-        control_file_contents << QString(" %1").arg(m_description);
-
-    control_file_contents << "";
-
-    QString control_file = Utils::BuildPath({debian_dir, "control"});
-    QFile file(control_file);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        ui->statusbar->showMessage(QString(tr("Open file %1 failed!")).arg(control_file));
+    if (!genControlFile()) {
         return;
     }
-    qDebug().noquote() << "Write:" << file.write(control_file_contents.join("\n").toUtf8()) << "Bytes to" << control_file;
-    file.flush();
-    file.close();
 
-    if (!m_preinst.isEmpty()) {
-        QString preinst_file = Utils::BuildPath({debian_dir, "preinst"});
-        QFile file(preinst_file);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            ui->statusbar->showMessage(QString(tr("Open file %1 failed!")).arg(preinst_file));
-            return;
-        }
-        if (!m_preinst.endsWith("\n")) {
-            m_preinst.append('\n');
-        }
-        qDebug().noquote() << "Write:" << file.write(m_preinst.toUtf8()) << "Bytes to" << preinst_file;
-        // Set permission 0755
-        file.setPermissions(QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser |
-                            QFileDevice::ReadGroup | QFileDevice::ExeGroup |
-                            QFileDevice::ReadOther | QFileDevice::ExeOther);
-        file.flush();
-        file.close();
+    if (!m_contents_preinst.isEmpty()) {
+        genScriptFile(Utils::BuildPath({m_debiandir, "preinst"}), m_contents_preinst);
     }
 
-    if (!m_postinst.isEmpty()) {
-        QString postinst_file = Utils::BuildPath({debian_dir, "postinst"});
-        QFile file(postinst_file);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            ui->statusbar->showMessage(QString(tr("Open file %1 failed!")).arg(postinst_file));
-            return;
-        }
-        if (!m_postinst.endsWith("\n")) {
-            m_postinst.append('\n');
-        }
-        qDebug().noquote() << "Write:" << file.write(m_postinst.toUtf8()) << "Bytes to" << postinst_file;
-        // Set permission 0755
-        file.setPermissions(QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser |
-                            QFileDevice::ReadGroup | QFileDevice::ExeGroup |
-                            QFileDevice::ReadOther | QFileDevice::ExeOther);
-        file.flush();
-        file.close();
+    if (!m_contents_postinst.isEmpty()) {
+        genScriptFile(Utils::BuildPath({m_debiandir, "postinst"}), m_contents_postinst);
     }
 
-    if (!m_prerm.isEmpty()) {
-        QString prerm_file = Utils::BuildPath({debian_dir, "prerm"});
-        QFile file(prerm_file);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            ui->statusbar->showMessage(QString(tr("Open file %1 failed!")).arg(prerm_file));
-            return;
-        }
-        if (!m_prerm.endsWith("\n")) {
-            m_prerm.append('\n');
-        }
-        qDebug().noquote() << "Write:" << file.write(m_prerm.toUtf8()) << "Bytes to" << prerm_file;
-        // Set permission 0755
-        file.setPermissions(QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser |
-                            QFileDevice::ReadGroup | QFileDevice::ExeGroup |
-                            QFileDevice::ReadOther | QFileDevice::ExeOther);
-        file.flush();
-        file.close();
+    if (!m_contents_prerm.isEmpty()) {
+        genScriptFile(Utils::BuildPath({m_debiandir, "prerm"}), m_contents_prerm);
     }
 
-    if (!m_postrm.isEmpty()) {
-        QString postrm_file = Utils::BuildPath({debian_dir, "postrm"});
-        QFile file(postrm_file);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            ui->statusbar->showMessage(QString(tr("Open file %1 failed!")).arg(postrm_file));
-            return;
-        }
-        if (!m_postrm.endsWith("\n")) {
-            m_postrm.append('\n');
-        }
-        qDebug().noquote() << "Write:" << file.write(m_postrm.toUtf8()) << "Bytes to" << postrm_file;
-        // Set permission 0755
-        file.setPermissions(QFileDevice::ReadUser | QFileDevice::WriteUser | QFileDevice::ExeUser |
-                            QFileDevice::ReadGroup | QFileDevice::ExeGroup |
-                            QFileDevice::ReadOther | QFileDevice::ExeOther);
-        file.flush();
-        file.close();
+    if (!m_contents_postrm.isEmpty()) {
+        genScriptFile(Utils::BuildPath({m_debiandir, "postrm"}), m_contents_postrm);
     }
 
     // Build package file
