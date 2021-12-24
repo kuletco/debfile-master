@@ -24,7 +24,7 @@ mkdir -p $INSTALL_BIN
 cp -at $INSTALL_BIN $PROJECT_TOP/debuilder
 
 mkdir -p $INSTALL_DATA
-cp -at $INSTALL_DATA $PROJECT_TOP/logo.png
+cp -at $INSTALL_DATA $PROJECT_TOP/resources/logo.png
 
 mkdir -p $INSTALL_SYS_DESKTOP
 cp -at $INSTALL_SYS_DESKTOP $PROJECT_TOP/debuilder.desktop
