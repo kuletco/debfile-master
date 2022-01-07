@@ -43,11 +43,13 @@ INCLUDEPATH += $${UI_DIR}
 SOURCES += \
     main.cpp \
     utils.cpp \
-    MainWindow.cpp
+    MainWindow.cpp \
+    DEBFile.cpp
 
 HEADERS += \
     utils.h \
-    MainWindow.h
+    MainWindow.h \
+    DEBFile.h
 
 FORMS += \
     MainWindow.ui
