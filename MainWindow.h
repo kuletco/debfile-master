@@ -7,6 +7,7 @@
 #include <QTimer>
 
 #include "DEBFile.h"
+#include "FileSystemModel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,6 +34,9 @@ protected:
 private slots:
     void update_date();
     void work_updated(QString info);
+
+    // UI Slots
+    void fsmode_RootPathChanged(const QString &newPath);
     void on_tabWidget_Main_currentChanged(int index);
     void on_PB_Build_clicked();
 
@@ -40,5 +44,6 @@ private:
     Ui::MainWindow *ui;
     QPointer<QTimer> m_date_updater;
     QPointer<DEBFile> m_deb;
+    QPointer<FileSystemModel> m_fsmodel;
 };
 #endif // MAINWINDOW_H

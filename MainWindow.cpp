@@ -21,6 +21,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) , ui(new Ui::MainW
     connect(m_deb, SIGNAL(work_finished(QString)), this, SLOT(work_updated(QString)));
     connect(m_deb, SIGNAL(work_failed(QString)), this, SLOT(work_updated(QString)));
 
+    m_fsmodel = new FileSystemModel();
+    connect(m_fsmodel, SIGNAL(rootPathChanged(QString)), this, SLOT(fsmode_RootPathChanged(QString)));
+    ui->treeView_Files->setModel(m_fsmodel);
+
     // Init defaults
     setWindowIcon(QIcon(":/icons/logo"));
 
@@ -42,6 +46,7 @@ MainWindow::~MainWindow()
     }
     delete m_date_updater;
     delete m_deb;
+    delete m_fsmodel;
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *e)
@@ -65,12 +70,23 @@ void MainWindow::work_updated(QString info)
 }
 
 // UI Slots
+void MainWindow::fsmode_RootPathChanged(const QString &newPath)
+{
+    Q_UNUSED(newPath)
+    // TODO: Update TreeView manual
+}
+
 void MainWindow::on_tabWidget_Main_currentChanged(int index)
 {
     switch (static_cast<Pages>(index)) {
     case Pages::Information: break;
     case Pages::Scripts: break;
     case Pages::Files: {
+        if (m_fsmodel->rootPath().isEmpty() || (m_fsmodel->rootPath() != m_deb->buildroot())) {
+            qDebug().noquote() << "Build Root:" << m_deb->buildroot();
+            m_fsmodel->setRootPath(m_deb->buildroot());
+            ui->treeView_Files->setRootIndex(m_fsmodel->index(m_deb->buildroot()));
+        }
         break;
     }
     default: break;

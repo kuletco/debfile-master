@@ -21,6 +21,30 @@
     </message>
 </context>
 <context>
+    <name>FileSystemModel</name>
+    <message>
+        <location filename="FileSystemModel.cpp" line="119"/>
+        <source>Modified Time</source>
+        <oldsource>Last Modified Time</oldsource>
+        <translation>修改时间</translation>
+    </message>
+    <message>
+        <location filename="FileSystemModel.cpp" line="132"/>
+        <source>Permission</source>
+        <translation>权限</translation>
+    </message>
+    <message>
+        <location filename="FileSystemModel.cpp" line="145"/>
+        <source>Owner</source>
+        <translation>所有者</translation>
+    </message>
+    <message>
+        <location filename="FileSystemModel.cpp" line="158"/>
+        <source>Group</source>
+        <translation>所属组</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="MainWindow.ui" line="26"/>

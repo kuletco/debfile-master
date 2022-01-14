@@ -41,12 +41,14 @@ RCC_DIR += $${BUILDDIR}
 INCLUDEPATH += $${UI_DIR}
 
 SOURCES += \
+    FileSystemModel.cpp \
     main.cpp \
     utils.cpp \
     MainWindow.cpp \
     DEBFile.cpp
 
 HEADERS += \
+    FileSystemModel.h \
     utils.h \
     MainWindow.h \
     DEBFile.h
