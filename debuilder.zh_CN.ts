@@ -2,6 +2,25 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
+    <name>DEBFile</name>
+    <message>
+        <location filename="DEBFile.cpp" line="199"/>
+        <source>Building...</source>
+        <translation>正在构建...</translation>
+    </message>
+    <message>
+        <location filename="DEBFile.cpp" line="205"/>
+        <source>Done. File saved to </source>
+        <translation>完成。文件保存为 </translation>
+    </message>
+    <message>
+        <location filename="DEBFile.cpp" line="218"/>
+        <location filename="DEBFile.cpp" line="227"/>
+        <source>Error: </source>
+        <translation>错误: </translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="MainWindow.ui" line="26"/>
@@ -318,94 +337,81 @@
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="805"/>
         <source>Entries</source>
-        <translation>路径</translation>
+        <translation type="vanished">路径</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="810"/>
         <source>Type</source>
-        <translation>类型</translation>
+        <translation type="vanished">类型</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="815"/>
         <source>Size</source>
-        <translation>大小</translation>
+        <translation type="vanished">大小</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="820"/>
         <source>Attribute</source>
-        <translation>属性</translation>
+        <translation type="vanished">属性</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="855"/>
+        <location filename="MainWindow.ui" line="834"/>
         <source>Start Build</source>
         <translation>开始构建</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="858"/>
+        <location filename="MainWindow.ui" line="837"/>
         <source>Build</source>
         <translation>构建</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="64"/>
         <source>Building...</source>
-        <translation>正在构建...</translation>
+        <translation type="vanished">正在构建...</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="70"/>
         <source>Done. File saved to </source>
-        <translation>完成。文件保存为: </translation>
+        <translation type="vanished">完成。文件保存为: </translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="83"/>
-        <location filename="MainWindow.cpp" line="94"/>
         <source>Error: </source>
-        <translation>错误: </translation>
+        <translation type="vanished">错误: </translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="124"/>
+        <location filename="MainWindow.cpp" line="125"/>
         <source>Package name is empty!</source>
         <translation>软件包名称未设置！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="129"/>
+        <location filename="MainWindow.cpp" line="130"/>
         <source>Package version is empty!</source>
         <translation>软件包版本未设置！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="134"/>
+        <location filename="MainWindow.cpp" line="135"/>
         <source>Invalid architecture!</source>
         <translation>无效的架构！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="139"/>
+        <location filename="MainWindow.cpp" line="140"/>
         <source>Package summary is empty!</source>
         <translation>软件包简介未设置！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="144"/>
+        <location filename="MainWindow.cpp" line="145"/>
         <source>Invalid package type!</source>
         <translation>无效的软件包类型！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="150"/>
+        <location filename="MainWindow.cpp" line="162"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="150"/>
+        <location filename="MainWindow.cpp" line="162"/>
         <source>Debian Package (*.deb *.udeb)</source>
         <translation>Debian 软件包 (*.deb *.udeb)</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="201"/>
-        <location filename="MainWindow.cpp" line="212"/>
-        <location filename="MainWindow.cpp" line="231"/>
-        <location filename="MainWindow.cpp" line="250"/>
-        <location filename="MainWindow.cpp" line="269"/>
         <source>Open file %1 failed!</source>
-        <translation>打开文件 %1 失败！</translation>
+        <translation type="vanished">打开文件 %1 失败！</translation>
     </message>
 </context>
 </TS>

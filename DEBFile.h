@@ -99,13 +99,14 @@ public:
     qint32 error() const { return m_error; }
     const QString &errStr() const { return m_errstr; }
 
+    const QString &buildroot();
     const QString &filename();
 
     qint64 CreateControlFile();
     qint64 CreateScriptFiles();
 
     void ClearBuildDir();
-    void CreateBuildDir();
+    void CreateBuildDir(bool force = false);
     void CreatePackage(const QString &debfile);
 
 protected:
@@ -126,7 +127,7 @@ private:
     qint32 m_error;
     QString m_errstr;
 
-    QString m_build_dir;
+    QString m_buildroot;
     QString m_filename;
     QString m_file;
 

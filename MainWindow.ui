@@ -799,28 +799,7 @@ QToolButton { border: none; }</string>
            </layout>
           </item>
           <item>
-           <widget class="QTreeWidget" name="treeWidget_Files">
-            <column>
-             <property name="text">
-              <string>Entries</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Type</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Size</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Attribute</string>
-             </property>
-            </column>
-           </widget>
+           <widget class="QTreeView" name="treeView_Files"/>
           </item>
          </layout>
         </widget>

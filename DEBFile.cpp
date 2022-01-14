@@ -1,11 +1,10 @@
-
 #include <QDebug>
 #include <QFileDialog>
 
 #include "utils.h"
 #include "DEBFile.h"
 
-DEBFile::DEBFile(QObject *parent) : QObject{parent}
+DEBFile::DEBFile(QObject *parent) : QObject{parent}, m_worker{new QProcess()}
 {
     m_protected = false;
     m_type = DEBAttrs::Type::deb;
@@ -13,7 +12,6 @@ DEBFile::DEBFile(QObject *parent) : QObject{parent}
     m_priority = DEBAttrs::Priority::standard;
     m_section = DEBAttrs::Section::misc;
 
-    m_worker = new QProcess;
     connect(m_worker, SIGNAL(started()), this, SLOT(worker_started()));
     connect(m_worker, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(worker_finished(int,QProcess::ExitStatus)));
     connect(m_worker, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(worker_error(QProcess::ProcessError)));
@@ -21,6 +19,8 @@ DEBFile::DEBFile(QObject *parent) : QObject{parent}
 
 DEBFile::~DEBFile()
 {
+    ClearBuildDir();
+
     if (m_worker->state() != QProcess::NotRunning) {
         m_worker->terminate();
         if (m_worker->state() != QProcess::NotRunning) {
@@ -30,39 +30,53 @@ DEBFile::~DEBFile()
     delete m_worker;
 }
 
+const QString &DEBFile::buildroot()
+{
+    if (m_buildroot.isEmpty()) {
+        CreateBuildDir();
+    }
+
+    return m_buildroot;
+}
+
 const QString &DEBFile::filename()
 {
-    m_filename = QString("%1_%2_%3.%4").arg(m_name, m_version, Utils::EnumConvert(m_architecture), Utils::EnumConvert(m_type));
+    if (m_filename.isEmpty()) {
+        m_filename = QString("%1_%2_%3.%4").arg(m_name, m_version, Utils::EnumConvert(m_architecture), Utils::EnumConvert(m_type));
+    }
 
     return m_filename;
 }
 
 void DEBFile::ClearBuildDir()
 {
-    if (!m_build_dir.isEmpty()) {
-        QDir dir(m_build_dir);
+    if (!m_buildroot.isEmpty()) {
+        QDir dir(m_buildroot);
         if (dir.exists()) {
             dir.removeRecursively();
         }
     }
 }
 
-void DEBFile::CreateBuildDir()
+void DEBFile::CreateBuildDir(bool force)
 {
-    char tempname[] = "DEBUILDER.XXXXXX";
-    if (m_build_dir.isEmpty()) {
+    if (m_buildroot.isEmpty()) {
+        char tempname[] = "DEBUILDER.XXXXXX";
         if (!mkdtemp(tempname)) {
             qWarning().noquote() << "Cannot create a uniquely-named tempdir!";
         }
-        m_build_dir = tempname;
 
-        QDir dir(m_build_dir);
+        QDir dir(tempname);
         dir.mkpath("DEBIAN");
-    } else {
+
+        m_buildroot = dir.absolutePath();
+    } else if (force) {
         ClearBuildDir();
         CreateBuildDir();
     }
-    qDebug().noquote() << "BuildDir:" << m_build_dir;
+//    if (!force) {
+//        qDebug().noquote() << "BuildDir:" << m_buildroot;
+//    }
 }
 
 qint64 DEBFile::CreateTextFile(const QString &file, QFile::Permissions permission, const QString &contents)
@@ -150,21 +164,21 @@ qint64 DEBFile::CreateControlFile()
     contents << "";
     m_contents_control = contents.join("\n").toUtf8();
 
-    return CreateTextFile(Utils::BuildPath({m_build_dir, "DEBIAN", "control"}), permission, m_contents_control.toUtf8());
+    return CreateTextFile(Utils::BuildPath({m_buildroot, "DEBIAN", "control"}), permission, m_contents_control.toUtf8());
 }
 
 qint64 DEBFile::CreateScriptFiles()
 {
-    if (!m_contents_preinst.isEmpty() && !CreateScriptFile(Utils::BuildPath({m_build_dir, "DEBIAN", "preinst"}), m_contents_preinst.toUtf8())) {
+    if (!m_contents_preinst.isEmpty() && !CreateScriptFile(Utils::BuildPath({m_buildroot, "DEBIAN", "preinst"}), m_contents_preinst.toUtf8())) {
         return m_error;
     }
-    if (!m_contents_postinst.isEmpty() && !CreateScriptFile(Utils::BuildPath({m_build_dir, "DEBIAN", "postinst"}), m_contents_postinst.toUtf8())) {
+    if (!m_contents_postinst.isEmpty() && !CreateScriptFile(Utils::BuildPath({m_buildroot, "DEBIAN", "postinst"}), m_contents_postinst.toUtf8())) {
         return m_error;
     }
-    if (!m_contents_prerm.isEmpty() && !CreateScriptFile(Utils::BuildPath({m_build_dir, "DEBIAN", "prerm"}), m_contents_prerm.toUtf8())) {
+    if (!m_contents_prerm.isEmpty() && !CreateScriptFile(Utils::BuildPath({m_buildroot, "DEBIAN", "prerm"}), m_contents_prerm.toUtf8())) {
         return m_error;
     }
-    if (!m_contents_postrm.isEmpty() && !CreateScriptFile(Utils::BuildPath({m_build_dir, "DEBIAN", "postrm"}), m_contents_postrm.toUtf8())) {
+    if (!m_contents_postrm.isEmpty() && !CreateScriptFile(Utils::BuildPath({m_buildroot, "DEBIAN", "postrm"}), m_contents_postrm.toUtf8())) {
         return m_error;
     }
 
@@ -175,7 +189,7 @@ void DEBFile::CreatePackage(const QString &debfile)
 {
     m_file = debfile;
     QStringList args;
-    args << "/usr/bin/dpkg-deb" << "--build" << m_build_dir << m_file;
+    args << "/usr/bin/dpkg-deb" << "--build" << m_buildroot << m_file;
     m_worker->start("/usr/bin/fakeroot", args);
 }
 

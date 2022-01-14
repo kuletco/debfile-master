@@ -1,4 +1,3 @@
-
 #include <QDate>
 #include <QFileDialog>
 #include <QDir>
@@ -14,26 +13,34 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) , ui(new Ui::MainW
 {
     ui->setupUi(this);
 
+    m_date_updater = new QTimer();
+    connect(m_date_updater, SIGNAL(timeout()), this, SLOT(update_date()));
+
     m_deb = new DEBFile();
     connect(m_deb, SIGNAL(work_started(QString)), this, SLOT(work_updated(QString)));
     connect(m_deb, SIGNAL(work_finished(QString)), this, SLOT(work_updated(QString)));
     connect(m_deb, SIGNAL(work_failed(QString)), this, SLOT(work_updated(QString)));
 
+    // Init defaults
     setWindowIcon(QIcon(":/icons/logo"));
 
     ui->statusbar->clearMessage();
     ui->LB_AppVer->setText(qApp->applicationVersion());
 
-    QDate date = QDate::currentDate();
-    QString date_str = date.toString("yyyy-MM-dd");
+    update_date();
     qDebug().noquote() << "AppVer:" << qApp->applicationVersion();
-    qDebug().noquote() << "Date:" << date_str;
-    ui->LB_Date->setText(date_str);
+    qDebug().noquote() << "Date:" << ui->LB_Date->text();
+
+    m_date_updater->start(1000 * 60); // Update Date every minute
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    if (m_date_updater->isActive()) {
+        m_date_updater->stop();
+    }
+    delete m_date_updater;
     delete m_deb;
 }
 
@@ -45,12 +52,31 @@ void MainWindow::keyReleaseEvent(QKeyEvent *e)
     }
 }
 
+void MainWindow::update_date()
+{
+    QDate date = QDate::currentDate();
+    QString date_str = date.toString("yyyy-MM-dd");
+    ui->LB_Date->setText(date_str);
+}
+
 void MainWindow::work_updated(QString info)
 {
     ui->statusbar->showMessage(info);
 }
 
 // UI Slots
+void MainWindow::on_tabWidget_Main_currentChanged(int index)
+{
+    switch (static_cast<Pages>(index)) {
+    case Pages::Information: break;
+    case Pages::Scripts: break;
+    case Pages::Files: {
+        break;
+    }
+    default: break;
+    }
+}
+
 void MainWindow::on_PB_Build_clicked()
 {
     ui->statusbar->clearMessage();
