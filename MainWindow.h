@@ -36,9 +36,13 @@ private slots:
     void work_updated(QString info);
 
     // UI Slots
-    void fsmode_RootPathChanged(const QString &newPath);
+    void fsmodel_RootPathChanged(const QString &newPath);
+    void fsmodel_DirectoryLoaded(const QString &path);
     void on_tabWidget_Main_currentChanged(int index);
     void on_PB_Build_clicked();
+    void on_TB_Add_Dir_clicked();
+    void on_TB_Add_File_clicked();
+    void on_TB_Remove_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -9,6 +9,8 @@
 
 #include "utils.h"
 
+#define DEBUG_MODE
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -22,8 +24,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) , ui(new Ui::MainW
     connect(m_deb, SIGNAL(work_failed(QString)), this, SLOT(work_updated(QString)));
 
     m_fsmodel = new FileSystemModel();
-    connect(m_fsmodel, SIGNAL(rootPathChanged(QString)), this, SLOT(fsmode_RootPathChanged(QString)));
+    connect(m_fsmodel, SIGNAL(rootPathChanged(QString)), this, SLOT(fsmodel_RootPathChanged(QString)));
+    connect(m_fsmodel, SIGNAL(directoryLoaded(QString)), this, SLOT(fsmodel_DirectoryLoaded(QString)));
     ui->treeView_Files->setModel(m_fsmodel);
+    ui->treeView_Files->setEditTriggers(QTreeView::EditKeyPressed);
+    ui->treeView_Files->setExpandsOnDoubleClick(true);
+//    ui->treeView_Files->header()->setStretchLastSection(false);
+//    ui->treeView_Files->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 
     // Init defaults
     setWindowIcon(QIcon(":/icons/logo"));
@@ -70,10 +77,19 @@ void MainWindow::work_updated(QString info)
 }
 
 // UI Slots
-void MainWindow::fsmode_RootPathChanged(const QString &newPath)
+void MainWindow::fsmodel_RootPathChanged(const QString &newPath)
 {
     Q_UNUSED(newPath)
     // TODO: Update TreeView manual
+}
+
+void MainWindow::fsmodel_DirectoryLoaded(const QString &path)
+{
+    qDebug().noquote() << "Directory Loaded:" << path;
+
+    for (int column = 0; column < m_fsmodel->columnCount(); column++) {
+        ui->treeView_Files->resizeColumnToContents(column);
+    }
 }
 
 void MainWindow::on_tabWidget_Main_currentChanged(int index)
@@ -85,7 +101,10 @@ void MainWindow::on_tabWidget_Main_currentChanged(int index)
         if (m_fsmodel->rootPath().isEmpty() || (m_fsmodel->rootPath() != m_deb->buildroot())) {
             qDebug().noquote() << "Build Root:" << m_deb->buildroot();
             m_fsmodel->setRootPath(m_deb->buildroot());
+            m_fsmodel->setReadOnly(false);
             ui->treeView_Files->setRootIndex(m_fsmodel->index(m_deb->buildroot()));
+            ui->treeView_Files->selectionModel()->setCurrentIndex(m_fsmodel->index(m_deb->buildroot()), QItemSelectionModel::Select);
+            ui->treeView_Files->resizeColumnToContents(3);
         }
         break;
     }
@@ -160,5 +179,53 @@ void MainWindow::on_PB_Build_clicked()
     QString filename = QFileDialog::getSaveFileName(this, tr("Save File"), QDir::homePath() + "/" + m_deb->filename(), tr("Debian Package (*.deb *.udeb)"));
     qDebug().noquote() << "Package File:" << filename;
     m_deb->CreatePackage(filename);
+}
+
+void MainWindow::on_TB_Add_Dir_clicked()
+{
+    if (m_fsmodel.isNull()) { return; }
+
+    QItemSelectionModel *model = ui->treeView_Files->selectionModel();
+    QModelIndex index = model->currentIndex();
+    qDebug().noquote() << "Current Index:" << m_fsmodel->filePath(index);
+    if (!index.isValid()) {
+        model->setCurrentIndex(m_fsmodel->index(m_deb->buildroot()), QItemSelectionModel::Select);
+        index = model->currentIndex();
+    }
+    if (!index.isValid()) {
+        qCritical().noquote() << "Invalid Selection";
+        return;
+    }
+    QModelIndex new_index = m_fsmodel->mkdir(index, tr("New Folder"));
+    model->setCurrentIndex(new_index, QItemSelectionModel::QItemSelectionModel::Select);
+    qDebug().noquote() << "Current Index:" << m_fsmodel->filePath(model->currentIndex());
+    ui->treeView_Files->edit(new_index);
+}
+
+void MainWindow::on_TB_Add_File_clicked()
+{
+    if (m_fsmodel.isNull()) { return; }
+}
+
+void MainWindow::on_TB_Remove_clicked()
+{
+    if (m_fsmodel.isNull()) { return; }
+
+    QModelIndex index = ui->treeView_Files->selectionModel()->currentIndex();
+    QModelIndex root = m_fsmodel->index(m_deb->buildroot());
+    qDebug().noquote() << "Root Path:" << m_fsmodel->filePath(root) << ", Selected Path:" << m_fsmodel->filePath(index);
+    if (index != root) {
+        if (m_fsmodel->isDir(index)) {
+            qDebug().noquote() << "Remove Dir:" << m_fsmodel->filePath(index);
+#ifdef DEBUG_MODE
+            m_fsmodel->rmdir(index);
+#endif
+        } else {
+            qDebug().noquote() << "Remove File:" << m_fsmodel->filePath(index);
+#ifdef DEBUG_MODE
+            m_fsmodel->remove(index);
+#endif
+        }
+    }
 }
 

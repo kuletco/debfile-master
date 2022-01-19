@@ -58,9 +58,11 @@ Qt::ItemFlags FileSystemModel::flags(const QModelIndex &index) const
 
     ExColumns column = static_cast<ExColumns>(index.column());
 
+#ifdef FSM_SHOW_PERMISSION
     if (column == ExColumns::Permission) {
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
     }
+#endif
 
     return QFileSystemModel::flags(index);
 }
@@ -79,6 +81,7 @@ QVariant FileSystemModel::data(const QModelIndex &index, int role) const
     ExColumns column = static_cast<ExColumns>(index.column());
 
     switch (column) {
+#ifdef FSM_SHOW_PERMISSION
     case ExColumns::Permission: {
         switch (role) {
         case Qt::DisplayRole:
@@ -91,14 +94,19 @@ QVariant FileSystemModel::data(const QModelIndex &index, int role) const
         }
         break;
     }
+#endif
+#ifdef FSM_SHOW_OWNER
     case ExColumns::Owner: {
         QFileInfo fi = fileInfo(index);
         return QVariant(fi.owner());
     }
+#endif
+#ifdef FSM_SHOW_GROUP
     case ExColumns::Group: {
         QFileInfo fi = fileInfo(index);
         return QVariant(fi.group());
     }
+#endif
     default: break;
     }
 
@@ -123,6 +131,7 @@ QVariant FileSystemModel::headerData(int section, Qt::Orientation orientation, i
         }
         break;
     }
+#ifdef FSM_SHOW_PERMISSION
     case ExColumns::Permission: {
         switch (role) {
         case Qt::DisplayRole:
@@ -136,6 +145,8 @@ QVariant FileSystemModel::headerData(int section, Qt::Orientation orientation, i
         }
         break;
     }
+#endif
+#ifdef FSM_SHOW_OWNER
     case ExColumns::Owner: {
         switch (role) {
         case Qt::DisplayRole:
@@ -149,6 +160,8 @@ QVariant FileSystemModel::headerData(int section, Qt::Orientation orientation, i
         }
         break;
     }
+#endif
+#ifdef FSM_SHOW_GROUP
     case ExColumns::Group: {
         switch (role) {
         case Qt::DisplayRole:
@@ -162,6 +175,7 @@ QVariant FileSystemModel::headerData(int section, Qt::Orientation orientation, i
         }
         break;
     }
+#endif
     default: break;
     }
 
