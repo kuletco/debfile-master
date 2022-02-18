@@ -1,12 +1,39 @@
 #include <QDebug>
+#include <unistd.h>
 #include "FileSystemModel.h"
 
 #define NO_PERMISSION_STR  "---------"
 
 FileSystemModel::FileSystemModel(QObject *parent) : QFileSystemModel{parent}
 {
+    m_copy_bytes = 0;
+    m_copy_count = 0;
+    m_copied_bytes = 0;
+    m_copied_count = 0;
+
+    // cppcheck-suppress useInitializationList
+    m_worker = new FileSystemWorkThread();
+    m_worker->moveToThread(&m_thread);
+    connect(&m_thread, SIGNAL(finished()), this, SLOT(work_thread_finished()));
+    connect(m_worker, SIGNAL(all_finished()), this, SLOT(work_thread_finished()));
+    connect(m_worker, SIGNAL(progress_count(QString,quint64,quint64)), this, SIGNAL(copy_work_progress_count(QString,quint64,quint64)));
+    connect(m_worker, SIGNAL(progress_bytes(QString,quint64,quint64)), this, SIGNAL(copy_work_progress_bytes(QString,quint64,quint64)));
+    connect(this, SIGNAL(do_copy(QString,QString,bool)), m_worker, SLOT(copy(QString,QString,bool)));
+    m_thread.start();
+
     iconProvider()->setOptions(QFileIconProvider::DontUseCustomDirectoryIcons);
     setResolveSymlinks(false);
+}
+
+FileSystemModel::~FileSystemModel()
+{
+    if (m_thread.isRunning()) {
+        m_thread.quit();
+        m_thread.wait();
+    }
+    if (!m_worker.isNull()) {
+        delete m_worker;
+    }
 }
 
 QString FileSystemModel::permission2str(QFile::Permissions permissions) const
@@ -50,6 +77,22 @@ QFile::Permissions FileSystemModel::str2permission(const QString &str) const
     return permissions;
 }
 
+void FileSystemModel::work_thread_finished()
+{
+    qDebug().noquote() << "WorkFinished!";
+    emit copy_work_finished();
+}
+
+void FileSystemModel::copy(const QString &src, const QString &dest, bool overwrite)
+{
+    emit do_copy(src, dest, overwrite);
+}
+
+int FileSystemModel::columnCount(const QModelIndex &parent) const
+{
+    return ((parent.column() > 0) ? 0 : static_cast<int>(ExColumns::NumColumns));
+}
+
 Qt::ItemFlags FileSystemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid()) {
@@ -65,11 +108,6 @@ Qt::ItemFlags FileSystemModel::flags(const QModelIndex &index) const
 #endif
 
     return QFileSystemModel::flags(index);
-}
-
-int FileSystemModel::columnCount(const QModelIndex &parent) const
-{
-    return ((parent.column() > 0) ? 0 : static_cast<int>(ExColumns::NumColumns));
 }
 
 QVariant FileSystemModel::data(const QModelIndex &index, int role) const

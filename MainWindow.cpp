@@ -202,9 +202,57 @@ void MainWindow::on_TB_Add_Dir_clicked()
     ui->treeView_Files->edit(new_index);
 }
 
-void MainWindow::on_TB_Add_File_clicked()
+void MainWindow::on_TB_Import_File_clicked()
 {
     if (m_fsmodel.isNull()) { return; }
+    QStringList sources;
+    QString title(tr("Select files"));
+    // Pop-up a dialog to select source files
+#if 0
+    QFileDialog dialog(this, title, QDir::homePath());
+    dialog.setFileMode(QFileDialog::ExistingFiles);
+    dialog.setOptions(QFileDialog::ReadOnly | QFileDialog::DontResolveSymlinks);
+    if (dialog.exec()) {
+        sources = dialog.selectedFiles();
+    }
+#else
+    sources = QFileDialog::getOpenFileNames(this, title, QDir::homePath());
+#endif
+    qDebug().noquote() << "Sources Dirs:";
+    qDebug().noquote() << sources.join("\n");
+
+    QItemSelectionModel *model = ui->treeView_Files->selectionModel();
+    qDebug().noquote() << "Copy Files to BuildDir:" << sources << "->" << m_fsmodel->filePath(model->currentIndex());
+    for (const QString &source : qAsConst(sources)) {
+        m_fsmodel->copy(source, m_fsmodel->filePath(model->currentIndex()), true);
+    }
+}
+
+void MainWindow::on_TB_Import_Dir_clicked()
+{
+    if (m_fsmodel.isNull()) { return; }
+    QStringList sources;
+    QString title(tr("Select a folder"));
+    // Pop-up a dialog to select source folders
+#if 0
+    QFileDialog dialog(this, title, QDir::homePath());
+    dialog.setFileMode(QFileDialog::Directory);
+    dialog.setOptions(QFileDialog::ReadOnly | QFileDialog::DontResolveSymlinks);
+    if (dialog.exec()) {
+        sources = dialog.selectedFiles();
+        qDebug().noquote() << "Select:" << dialog.selectedUrls() << dialog.selectedNameFilter();
+    }
+#else
+    sources << QFileDialog::getExistingDirectory(this, title, QDir::homePath());
+#endif
+    qDebug().noquote() << "Sources Dirs:";
+    qDebug().noquote() << sources.join("\n");
+
+    QItemSelectionModel *model = ui->treeView_Files->selectionModel();
+    qDebug().noquote() << "Copy Folder to BuildDir:" << sources << "->" << m_fsmodel->filePath(model->currentIndex());
+    for (const QString &source : qAsConst(sources)) {
+        m_fsmodel->copy(source, m_fsmodel->filePath(model->currentIndex()), true);
+    }
 }
 
 void MainWindow::on_TB_Remove_clicked()

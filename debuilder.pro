@@ -1,5 +1,5 @@
 QT       += core gui
-VERSION = 1.0.0
+VERSION = 1.1.0
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -42,6 +42,7 @@ INCLUDEPATH += $${UI_DIR}
 
 SOURCES += \
     FileSystemModel.cpp \
+    FileSystemWorkThread.cpp \
     main.cpp \
     utils.cpp \
     MainWindow.cpp \
@@ -49,6 +50,7 @@ SOURCES += \
 
 HEADERS += \
     FileSystemModel.h \
+    FileSystemWorkThread.h \
     utils.h \
     MainWindow.h \
     DEBFile.h

@@ -730,7 +730,7 @@ QToolButton { border: none; }</string>
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="TB_Add_File">
+             <widget class="QToolButton" name="TB_Import_File">
               <property name="toolTip">
                <string>Import folders or files to current path.</string>
               </property>
@@ -739,11 +739,35 @@ QToolButton { border: none; }</string>
 QToolButton { border: none; }</string>
               </property>
               <property name="text">
-               <string>Import</string>
+               <string>Import File</string>
               </property>
               <property name="icon">
                <iconset resource="debuilder.qrc">
                 <normaloff>:/icons/toolbar/file-add</normaloff>:/icons/toolbar/file-add</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="toolButtonStyle">
+               <enum>Qt::ToolButtonTextBesideIcon</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="TB_Import_Dir">
+              <property name="styleSheet">
+               <string notr="true">
+QToolButton { border: none; }</string>
+              </property>
+              <property name="text">
+               <string>Import Folder</string>
+              </property>
+              <property name="icon">
+               <iconset resource="debuilder.qrc">
+                <normaloff>:/icons/toolbar/dir-add</normaloff>:/icons/toolbar/dir-add</iconset>
               </property>
               <property name="iconSize">
                <size>

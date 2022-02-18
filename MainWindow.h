@@ -41,7 +41,8 @@ private slots:
     void on_tabWidget_Main_currentChanged(int index);
     void on_PB_Build_clicked();
     void on_TB_Add_Dir_clicked();
-    void on_TB_Add_File_clicked();
+    void on_TB_Import_File_clicked();
+    void on_TB_Import_Dir_clicked();
     void on_TB_Remove_clicked();
 
 private:

@@ -23,23 +23,23 @@
 <context>
     <name>FileSystemModel</name>
     <message>
-        <location filename="FileSystemModel.cpp" line="119"/>
+        <location filename="FileSystemModel.cpp" line="165"/>
         <source>Modified Time</source>
         <oldsource>Last Modified Time</oldsource>
         <translation>修改时间</translation>
     </message>
     <message>
-        <location filename="FileSystemModel.cpp" line="132"/>
+        <location filename="FileSystemModel.cpp" line="179"/>
         <source>Permission</source>
         <translation>权限</translation>
     </message>
     <message>
-        <location filename="FileSystemModel.cpp" line="145"/>
+        <location filename="FileSystemModel.cpp" line="194"/>
         <source>Owner</source>
         <translation>所有者</translation>
     </message>
     <message>
-        <location filename="FileSystemModel.cpp" line="158"/>
+        <location filename="FileSystemModel.cpp" line="209"/>
         <source>Group</source>
         <translation>所属组</translation>
     </message>
@@ -347,16 +347,22 @@
     </message>
     <message>
         <location filename="MainWindow.ui" line="742"/>
-        <source>Import</source>
-        <translation>导入</translation>
+        <source>Import File</source>
+        <oldsource>Import</oldsource>
+        <translation>导入文件</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="762"/>
+        <location filename="MainWindow.ui" line="766"/>
+        <source>Import Folder</source>
+        <translation>导入文件夹</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="786"/>
         <source>Remove folders or files from current path.</source>
         <translation>移除当前路径中的文件夹或文件。</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="769"/>
+        <location filename="MainWindow.ui" line="793"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
@@ -377,12 +383,12 @@
         <translation type="vanished">属性</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="834"/>
+        <location filename="MainWindow.ui" line="858"/>
         <source>Start Build</source>
         <translation>开始构建</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="837"/>
+        <location filename="MainWindow.ui" line="861"/>
         <source>Build</source>
         <translation>构建</translation>
     </message>
@@ -399,39 +405,54 @@
         <translation type="vanished">错误: </translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="125"/>
+        <location filename="MainWindow.cpp" line="142"/>
         <source>Package name is empty!</source>
         <translation>软件包名称未设置！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="130"/>
+        <location filename="MainWindow.cpp" line="147"/>
         <source>Package version is empty!</source>
         <translation>软件包版本未设置！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="135"/>
+        <location filename="MainWindow.cpp" line="152"/>
         <source>Invalid architecture!</source>
         <translation>无效的架构！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="140"/>
+        <location filename="MainWindow.cpp" line="157"/>
         <source>Package summary is empty!</source>
         <translation>软件包简介未设置！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="145"/>
+        <location filename="MainWindow.cpp" line="162"/>
         <source>Invalid package type!</source>
         <translation>无效的软件包类型！</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="162"/>
+        <location filename="MainWindow.cpp" line="179"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="162"/>
+        <location filename="MainWindow.cpp" line="179"/>
         <source>Debian Package (*.deb *.udeb)</source>
         <translation>Debian 软件包 (*.deb *.udeb)</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="199"/>
+        <source>New Folder</source>
+        <translation>新建文件夹</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="209"/>
+        <source>Select files</source>
+        <translation>选择文件</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="235"/>
+        <source>Select a folder</source>
+        <translation>选择文件夹</translation>
     </message>
     <message>
         <source>Open file %1 failed!</source>
