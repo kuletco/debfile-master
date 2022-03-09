@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QPointer>
 #include <QTimer>
+#include <QProgressBar>
 
 #include "DEBFile.h"
 #include "FileSystemModel.h"
@@ -34,6 +35,7 @@ protected:
 private slots:
     void update_date();
     void work_updated(QString info);
+    void copy_progress(const QString &file, quint64 copied, quint64 count);
 
     // UI Slots
     void fsmodel_RootPathChanged(const QString &newPath);
@@ -47,6 +49,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QPointer<QProgressBar> m_progress;
     QPointer<QTimer> m_date_updater;
     QPointer<DEBFile> m_deb;
     QPointer<FileSystemModel> m_fsmodel;

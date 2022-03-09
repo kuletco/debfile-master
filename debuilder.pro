@@ -1,5 +1,4 @@
-QT       += core gui
-VERSION = 1.1.0
+VERSION = 1.2.0
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -79,5 +78,5 @@ QMAKE_EXTRA_TARGETS += DEBIAN
 QMAKE_EXTRA_COMPILERS += lrelease
 lrelease.input         = TRANSLATIONS
 lrelease.output        = ${QMAKE_FILE_BASE}.qm
-lrelease.commands      = $$[QT_INSTALL_BINS]/lrelease ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
+lrelease.commands      = $$[QT_HOST_BINS]/lrelease ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
 lrelease.CONFIG       += no_link target_predeps

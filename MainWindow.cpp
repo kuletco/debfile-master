@@ -15,6 +15,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) , ui(new Ui::MainW
 {
     ui->setupUi(this);
 
+    QLabel space;
+    space.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui->statusbar->addPermanentWidget(&space);
+
+    m_progress = new QProgressBar(ui->statusbar);
+    m_progress->setMaximumWidth(150);
+    m_progress->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    m_progress->setRange(0, 100);
+    ui->statusbar->addPermanentWidget(m_progress);
+    m_progress->hide();
+
     m_date_updater = new QTimer();
     connect(m_date_updater, SIGNAL(timeout()), this, SLOT(update_date()));
 
@@ -26,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) , ui(new Ui::MainW
     m_fsmodel = new FileSystemModel();
     connect(m_fsmodel, SIGNAL(rootPathChanged(QString)), this, SLOT(fsmodel_RootPathChanged(QString)));
     connect(m_fsmodel, SIGNAL(directoryLoaded(QString)), this, SLOT(fsmodel_DirectoryLoaded(QString)));
+    connect(m_fsmodel, SIGNAL(copy_work_progress_count(QString,quint64,quint64)), this, SLOT(copy_progress(QString,quint64,quint64)));
     ui->treeView_Files->setModel(m_fsmodel);
     ui->treeView_Files->setEditTriggers(QTreeView::EditKeyPressed);
     ui->treeView_Files->setExpandsOnDoubleClick(true);
@@ -74,6 +86,24 @@ void MainWindow::update_date()
 void MainWindow::work_updated(QString info)
 {
     ui->statusbar->showMessage(info);
+}
+
+void MainWindow::copy_progress(const QString &file, quint64 copied, quint64 count)
+{
+    int persent = copied / count * 100;
+
+    if (persent < 100) {
+        QFileInfo fi(file);
+        QString msg = QString(tr("Copying file (%1/%2): %3")).arg(QString::number(copied), QString::number(count), fi.fileName());
+        qDebug().noquote() << "Progress:" << msg;
+
+        ui->statusbar->showMessage(msg);
+        m_progress->setValue(copied / count * 100);
+        m_progress->show();
+    } else {
+        ui->statusbar->clearMessage();
+        m_progress->hide();
+    }
 }
 
 // UI Slots
