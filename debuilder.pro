@@ -1,4 +1,4 @@
-VERSION = 1.2.0
+VERSION = 1.1.1
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
