@@ -61,7 +61,7 @@ void DEBFile::ClearBuildDir()
 void DEBFile::CreateBuildDir(bool force)
 {
     if (m_buildroot.isEmpty()) {
-        char tempname[] = "DEBUILDER.XXXXXX";
+        char tempname[] = "DEBTEMP.XXXXXX";
         if (!mkdtemp(tempname)) {
             qWarning().noquote() << "Cannot create a uniquely-named tempdir!";
         }

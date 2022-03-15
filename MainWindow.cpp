@@ -72,7 +72,11 @@ void MainWindow::keyReleaseEvent(QKeyEvent *e)
 {
     QWidget::keyReleaseEvent(e);
     if (e->key() == Qt::Key_Escape) {
-        qApp->quit();
+        // FIXME: ESC will exit app either!!!!
+        qDebug().noquote() << "Window Modality:" << this->windowModality();
+        if (this->isActiveWindow()) {
+            qApp->quit();
+        }
     }
 }
 

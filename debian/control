@@ -1,4 +1,4 @@
-Package: debuilder
+Package: debfile-master
 Version: VERSION
 Architecture: ARCHITECTURE
 Maintainer: Wang Hong <kuletco@qq.com>

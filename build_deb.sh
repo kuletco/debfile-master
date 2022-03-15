@@ -5,7 +5,7 @@ set -e
 WORKDIR=$(pwd)
 PROJECT_TOP=$(cd $(dirname $0); pwd)
 
-TARGET=debuilder
+TARGET=debfile-master
 
 BUILD_DIR=$WORKDIR/.build_deb
 BUILD_DEBIAN_DIR=$BUILD_DIR/DEBIAN
@@ -21,16 +21,16 @@ mkdir -p $BUILD_DIR/DEBIAN
 cp -at $BUILD_DEBIAN_DIR $PROJECT_TOP/debian/*
 
 mkdir -p $INSTALL_BIN
-cp -at $INSTALL_BIN $PROJECT_TOP/debuilder
+cp -at $INSTALL_BIN $PROJECT_TOP/debfile-master
 
 mkdir -p $INSTALL_DATA
 cp -at $INSTALL_DATA $PROJECT_TOP/resources/logo.png
 
 mkdir -p $INSTALL_SYS_DESKTOP
-cp -at $INSTALL_SYS_DESKTOP $PROJECT_TOP/debuilder.desktop
+cp -at $INSTALL_SYS_DESKTOP $PROJECT_TOP/debfile-master.desktop
 
 # Update Control and Desktop file
-DESKTOP_FILE=$INSTALL_SYS_DESKTOP/debuilder.desktop
+DESKTOP_FILE=$INSTALL_SYS_DESKTOP/debfile-master.desktop
 CONTROL_FILE=$BUILD_DEBIAN_DIR/control
 
 # Usage: UpdateValue <File> <Separator> <Key> <Value>

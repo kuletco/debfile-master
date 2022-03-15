@@ -59,7 +59,7 @@ compile_commands.json
 /.qtc_clangd
 /.clangd
 .qmake.stash
-debuilder
+debfile-master
 *.deb
 
 # Users files

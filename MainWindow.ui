@@ -715,7 +715,7 @@ QToolButton { border: none; }</string>
                <string>Create</string>
               </property>
               <property name="icon">
-               <iconset resource="debuilder.qrc">
+               <iconset resource="debfile-master.qrc">
                 <normaloff>:/icons/toolbar/dir-add</normaloff>:/icons/toolbar/dir-add</iconset>
               </property>
               <property name="iconSize">
@@ -742,7 +742,7 @@ QToolButton { border: none; }</string>
                <string>Import File</string>
               </property>
               <property name="icon">
-               <iconset resource="debuilder.qrc">
+               <iconset resource="debfile-master.qrc">
                 <normaloff>:/icons/toolbar/file-add</normaloff>:/icons/toolbar/file-add</iconset>
               </property>
               <property name="iconSize">
@@ -766,7 +766,7 @@ QToolButton { border: none; }</string>
                <string>Import Folder</string>
               </property>
               <property name="icon">
-               <iconset resource="debuilder.qrc">
+               <iconset resource="debfile-master.qrc">
                 <normaloff>:/icons/toolbar/dir-add</normaloff>:/icons/toolbar/dir-add</iconset>
               </property>
               <property name="iconSize">
@@ -793,7 +793,7 @@ QToolButton { border: none; }</string>
                <string>Remove</string>
               </property>
               <property name="icon">
-               <iconset resource="debuilder.qrc">
+               <iconset resource="debfile-master.qrc">
                 <normaloff>:/icons/toolbar/trash</normaloff>:/icons/toolbar/trash</iconset>
               </property>
               <property name="iconSize">
@@ -893,7 +893,7 @@ QToolButton { border: none; }</string>
   <tabstop>TE_PostRM</tabstop>
  </tabstops>
  <resources>
-  <include location="debuilder.qrc"/>
+  <include location="debfile-master.qrc"/>
  </resources>
  <connections/>
 </ui>

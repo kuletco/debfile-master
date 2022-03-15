@@ -58,14 +58,14 @@ FORMS += \
     MainWindow.ui
 
 TRANSLATIONS += \
-    debuilder.zh_CN.ts
+    debfile-master.zh_CN.ts
 
 RESOURCES += \
-    debuilder.qrc
+    debfile-master.qrc
 
 OTHER_FILES += \
     logo.png \
-    debuilder.desktop \
+    debfile-master.desktop \
     build_deb.sh \
     debian/control
 

@@ -10,6 +10,6 @@
         <file alias="trash">resources/toolbar/trash.png</file>
     </qresource>
     <qresource prefix="/i18n">
-        <file alias="zh_CN">debuilder.zh_CN.qm</file>
+        <file alias="zh_CN">debfile-master.zh_CN.qm</file>
     </qresource>
 </RCC>
