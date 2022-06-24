@@ -299,16 +299,7 @@ void MainWindow::on_TB_Import_File_clicked()
     QStringList sources;
     QString title(tr("Select files"));
     // Pop-up a dialog to select source files
-#if 0
-    QFileDialog dialog(this, title, QDir::homePath());
-    dialog.setFileMode(QFileDialog::ExistingFiles);
-    dialog.setOptions(QFileDialog::ReadOnly | QFileDialog::DontResolveSymlinks);
-    if (dialog.exec()) {
-        sources = dialog.selectedFiles();
-    }
-#else
     sources = QFileDialog::getOpenFileNames(this, title, QDir::homePath());
-#endif
     qDebug().noquote() << "Sources Dirs:";
     qDebug().noquote() << sources.join("\n");
 
@@ -325,17 +316,7 @@ void MainWindow::on_TB_Import_Dir_clicked()
     QStringList sources;
     QString title(tr("Select a folder"));
     // Pop-up a dialog to select source folders
-#if 0
-    QFileDialog dialog(this, title, QDir::homePath());
-    dialog.setFileMode(QFileDialog::Directory);
-    dialog.setOptions(QFileDialog::ReadOnly | QFileDialog::DontResolveSymlinks);
-    if (dialog.exec()) {
-        sources = dialog.selectedFiles();
-        qDebug().noquote() << "Select:" << dialog.selectedUrls() << dialog.selectedNameFilter();
-    }
-#else
     sources << QFileDialog::getExistingDirectory(this, title, QDir::homePath());
-#endif
     qDebug().noquote() << "Sources Dirs:";
     qDebug().noquote() << sources.join("\n");
 

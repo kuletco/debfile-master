@@ -165,6 +165,7 @@ qint64 DEBFile::CreateControlFile()
 
     contents << "";
     m_contents_control = contents.join("\n").toUtf8();
+    qDebug().noquote() << QString("ControlFile:\n%1").arg(m_contents_control);
 
     return CreateTextFile(Utils::BuildPath({m_buildroot, "DEBIAN", "control"}), permission, m_contents_control.toUtf8());
 }
