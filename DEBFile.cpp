@@ -41,9 +41,7 @@ const QString &DEBFile::buildroot()
 
 const QString &DEBFile::filename()
 {
-    if (m_filename.isEmpty()) {
-        m_filename = QString("%1_%2_%3.%4").arg(m_name, m_version, Utils::EnumConvert(m_architecture), Utils::EnumConvert(m_type));
-    }
+    m_filename = QString("%1_%2_%3.%4").arg(m_name, m_version, Utils::EnumConvert(m_architecture), Utils::EnumConvert(m_type));
 
     return m_filename;
 }
