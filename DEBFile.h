@@ -135,9 +135,12 @@ private slots:
     void worker_error(QProcess::ProcessError error);
 
 signals:
-    void work_started(QString info);
-    void work_finished(QString info);
-    void work_failed(QString info);
+    void work_started();
+    void work_finished();
+    void work_failed();
+    void work_update(QString info);
+    void buildroot_cleared();
+    void buildroot_changed(QString buildroot);
 
 private:
     qint32 m_error;

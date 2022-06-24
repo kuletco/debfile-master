@@ -34,7 +34,10 @@ protected:
 
 private slots:
     void update_date();
-    void work_updated(QString info);
+    void work_started();
+    void work_finished();
+    void work_failed();
+    void work_update(QString info);
     void copy_progress(const QString &file, quint64 copied, quint64 count);
 
     // UI Slots

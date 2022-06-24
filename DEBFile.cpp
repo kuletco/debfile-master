@@ -54,6 +54,7 @@ void DEBFile::ClearBuildDir()
         QDir dir(m_buildroot);
         if (dir.exists()) {
             dir.removeRecursively();
+            emit buildroot_cleared();
         }
     }
 }
@@ -70,6 +71,8 @@ void DEBFile::CreateBuildDir(bool force)
         dir.mkpath("DEBIAN");
 
         m_buildroot = dir.absolutePath();
+
+        emit buildroot_changed(m_buildroot);
     } else if (force) {
         ClearBuildDir();
         CreateBuildDir();
@@ -107,8 +110,9 @@ qint64 DEBFile::CreateTextFile(const QString &file, QFile::Permissions permissio
 CreateFileError:
     m_error = _file.error();
     m_errstr = _file.errorString();
-    qCritical().noquote() << "Error:" << m_error << " | " << m_errstr;
-    emit work_failed(m_errstr);
+    qCritical().noquote() << "CreateTextFile Error:" << m_error << " | " << m_errstr;
+    emit work_update(m_errstr);
+    emit work_failed();
 
     return m_error;
 }
@@ -196,13 +200,15 @@ void DEBFile::CreatePackage(const QString &debfile)
 void DEBFile::worker_started()
 {
     qDebug().noquote() << m_worker->program() << m_worker->arguments();
-    emit work_started(tr("Building..."));
+    emit work_started();
+    emit work_update(tr("Building..."));
 }
 
 void DEBFile::worker_finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     if (exitCode == 0 && exitStatus == QProcess::NormalExit) {
-        emit work_finished(tr("Done. File saved to ") + m_file);
+        emit work_update(tr("Done. File saved to ") + m_file);
+        emit work_finished();
     } else {
         QString errstr;
         if (exitStatus != QProcess::NormalExit) {
@@ -216,14 +222,16 @@ void DEBFile::worker_finished(int exitCode, QProcess::ExitStatus exitStatus)
         }
         qCritical().noquote() << "Exit:" << exitCode << exitStatus << "Error:" << errstr;
         m_errstr = tr("Error: ") + errstr;
-        emit work_failed(m_errstr);
+        emit work_update(m_errstr);
+        emit work_failed();
     }
     this->ClearBuildDir();
 }
 
 void DEBFile::worker_error(QProcess::ProcessError error)
 {
-    qCritical().noquote() << "Error:" << error << m_worker->errorString();
+    qCritical().noquote() << "Worker Error:" << error << m_worker->errorString();
     m_errstr = tr("Error: ") + m_worker->errorString();
-    emit work_failed(m_errstr);
+    emit work_update(m_errstr);
+    emit work_failed();
 }

@@ -30,9 +30,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) , ui(new Ui::MainW
     connect(m_date_updater, SIGNAL(timeout()), this, SLOT(update_date()));
 
     m_deb = new DEBFile();
-    connect(m_deb, SIGNAL(work_started(QString)), this, SLOT(work_updated(QString)));
-    connect(m_deb, SIGNAL(work_finished(QString)), this, SLOT(work_updated(QString)));
-    connect(m_deb, SIGNAL(work_failed(QString)), this, SLOT(work_updated(QString)));
+    connect(m_deb, SIGNAL(work_started()), this, SLOT(work_started()));
+    connect(m_deb, SIGNAL(work_finished()), this, SLOT(work_finished()));
+    connect(m_deb, SIGNAL(work_failed()), this, SLOT(work_failed()));
+    connect(m_deb, SIGNAL(work_update(QString)), this, SLOT(work_update(QString)));
+    connect(m_deb, SIGNAL(buildroot_cleared()), this, SLOT(clear_buildroot()));
+    connect(m_deb, SIGNAL(buildroot_changed(QString)), this, SLOT(change_buildroot(QString)));
 
     m_fsmodel = new FileSystemModel();
     connect(m_fsmodel, SIGNAL(rootPathChanged(QString)), this, SLOT(fsmodel_RootPathChanged(QString)));
@@ -87,7 +90,22 @@ void MainWindow::update_date()
     ui->LB_Date->setText(date_str);
 }
 
-void MainWindow::work_updated(QString info)
+void MainWindow::work_started()
+{
+    // qDebug().noquote() << "Work Started";
+}
+
+void MainWindow::work_finished()
+{
+    // qDebug().noquote() << "Work Finished";
+}
+
+void MainWindow::work_failed()
+{
+    // qDebug().noquote() << "Work Failed";
+}
+
+void MainWindow::work_update(QString info)
 {
     ui->statusbar->showMessage(info);
 }
@@ -99,7 +117,6 @@ void MainWindow::copy_progress(const QString &file, quint64 copied, quint64 coun
     if (persent < 100) {
         QFileInfo fi(file);
         QString msg = QString(tr("Copying file (%1/%2): %3")).arg(QString::number(copied), QString::number(count), fi.fileName());
-        qDebug().noquote() << "Progress:" << msg;
 
         ui->statusbar->showMessage(msg);
         m_progress->setValue(copied / count * 100);

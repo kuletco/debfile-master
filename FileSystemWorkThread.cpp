@@ -26,7 +26,7 @@ quint64 FileSystemWorkThread::updateFileList(const QString &dir)
 
     QFileInfo top(dir);
     if (!top.exists() && !top.isSymLink()) {
-        qCritical().noquote() << "Error:" << QString("Source [%1] not exist!").arg(dir);
+        qCritical().noquote() << "UpdateFileList Error:" << QString("Source [%1] not exist!").arg(dir);
         return bytes;
     }
 
@@ -107,7 +107,7 @@ void FileSystemWorkThread::copy(const QString &src, const QString &dest, bool ov
                 if (fi.isDir()) {
                     QDir _dir(destination);
                     if (!_dir.removeRecursively()) {
-                        qCritical().noquote() << "Error:" << QString("Remove [%1] failed!").arg(destination);
+                        qCritical().noquote() << "Copy Error:" << QString("Remove [%1] failed!").arg(destination);
                         m_copy_failed_list.append(entry);
                         continue;
                     }
@@ -123,13 +123,13 @@ void FileSystemWorkThread::copy(const QString &src, const QString &dest, bool ov
                 QByteArray linkTarget(4096, '\0');
                 ssize_t len = readlink(entry.absoluteFilePath().toUtf8(), linkTarget.data(), linkTarget.size() - 1);
                 if (linkTarget.size() < len) {
-                    qCritical().noquote() << "Error:" << QString("Get link [%1] target failed!").arg(entry.absoluteFilePath());
+                    qCritical().noquote() << "Copy Error:" << QString("Get link [%1] target failed!").arg(entry.absoluteFilePath());
                     continue;
                 }
                 action.setFileName(linkTarget);
                 qDebug().noquote() << "Link:" << QString("[%1] -> [%2]").arg(destination, QString(linkTarget));
                 if (!action.link(destination)) {
-                    qCritical().noquote() << "Error:" << QString("Create Link [%1] failed!").arg(destination) << "ErrCode:" << action.error() << action.errorString();
+                    qCritical().noquote() << "Copy Error:" << QString("Create Link [%1] failed!").arg(destination) << "ErrCode:" << action.error() << action.errorString();
                     m_copy_failed_list.append(entry);
                     continue;
                 }
@@ -137,7 +137,7 @@ void FileSystemWorkThread::copy(const QString &src, const QString &dest, bool ov
                 action.setFileName(source);
                 qDebug().noquote() << "Copy:" << QString("[%1] -> [%2]").arg(source, destination);
                 if (!action.copy(destination)) {
-                    qCritical().noquote() << QString("Copy [%1] to [%2] failed!").arg(source, destination) << "Error:" << action.error() << action.errorString();
+                    qCritical().noquote() << QString("Copy [%1] to [%2] failed!").arg(source, destination) << "Copy Error:" << action.error() << action.errorString();
                     m_copy_failed_list.append(entry);
                 }
             } else if (entry.isDir()) {
@@ -146,7 +146,7 @@ void FileSystemWorkThread::copy(const QString &src, const QString &dest, bool ov
                 _dir.mkpath(_fi.fileName());
                 qDebug().noquote() << "Create Dir:" << destination;
             } else {
-                qCritical().noquote() << "Error:" << "Unsupported file type!";
+                qCritical().noquote() << "Copy Error:" << "Unsupported file type!";
                 return;
             }
         }
