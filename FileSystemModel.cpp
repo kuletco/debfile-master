@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <unistd.h>
 #include "FileSystemModel.h"
+#include "qnamespace.h"
 
 #define NO_PERMISSION_STR  "---------"
 
@@ -56,7 +57,7 @@ QString FileSystemModel::permission2str(QFile::Permissions permissions) const
 
 QFile::Permissions FileSystemModel::str2permission(const QString &str) const
 {
-    QFile::Permissions permissions = 0;
+    QFile::Permissions permissions;
 
     if (str.size() !=  QString(NO_PERMISSION_STR).size()) {
         return permissions;
@@ -96,7 +97,7 @@ int FileSystemModel::columnCount(const QModelIndex &parent) const
 Qt::ItemFlags FileSystemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid()) {
-        return 0;
+        return Qt::ItemFlag::NoItemFlags;
     }
 
     ExColumns column = static_cast<ExColumns>(index.column());
