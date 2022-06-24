@@ -225,7 +225,7 @@ void DEBFile::worker_finished(int exitCode, QProcess::ExitStatus exitStatus)
         emit work_update(m_errstr);
         emit work_failed();
     }
-    this->ClearBuildDir();
+//    this->ClearBuildDir();
 }
 
 void DEBFile::worker_error(QProcess::ProcessError error)
