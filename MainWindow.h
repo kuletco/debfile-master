@@ -20,6 +20,7 @@ class MainWindow : public QMainWindow
 public:
     enum class Pages {
         Information = 0,
+        Signature,
         Scripts,
         Files,
         NumPages,

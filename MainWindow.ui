@@ -19,15 +19,48 @@
   <property name="maximumSize">
    <size>
     <width>1032</width>
-    <height>711</height>
+    <height>820</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Debian Package Builder</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
+   <layout class="QGridLayout" name="GL_MainWindow">
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="HL_Bottom_ButtonBox">
+      <item>
+       <spacer name="HS_Bottom_ButtonBox">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="PB_Build">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Start Build</string>
+        </property>
+        <property name="text">
+         <string>Build</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="0">
      <widget class="QLabel" name="LB_Banner">
       <property name="minimumSize">
        <size>
@@ -40,7 +73,7 @@
       </property>
      </widget>
     </item>
-    <item>
+    <item row="1" column="0">
      <layout class="QHBoxLayout" name="HL_Center">
       <property name="sizeConstraint">
        <enum>QLayout::SetMinAndMaxSize</enum>
@@ -139,7 +172,7 @@ QLabel { image: url(:/icons/logo); }</string>
              </sizepolicy>
             </property>
             <property name="text">
-             <string/>
+             <string notr="true">0.0.0</string>
             </property>
            </widget>
           </item>
@@ -190,21 +223,35 @@ QLabel { image: url(:/icons/logo); }</string>
          <attribute name="title">
           <string>Information</string>
          </attribute>
-         <layout class="QGridLayout" name="gridLayout">
-          <property name="sizeConstraint">
-           <enum>QLayout::SetNoConstraint</enum>
-          </property>
-          <item row="1" column="0">
-           <widget class="QLabel" name="LB_Version">
+         <layout class="QGridLayout" name="GL_Tab_Info">
+          <item row="0" column="0">
+           <widget class="QLabel" name="LB_Package">
             <property name="text">
-             <string>Version</string>
+             <string>Package</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
-          <item row="0" column="3">
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="LE_Package">
+            <property name="placeholderText">
+             <string>Package name</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" colspan="2">
+           <widget class="QLabel" name="LB_PackageType">
+            <property name="text">
+             <string>Package Type</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
            <widget class="QComboBox" name="ComboBox_PackageType">
             <item>
              <property name="text">
@@ -218,98 +265,17 @@ QLabel { image: url(:/icons/logo); }</string>
             </item>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="LB_Package">
-            <property name="text">
-             <string>Package</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="LB_Conflicts">
-            <property name="text">
-             <string>Conflicts</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="LB_PreDepends">
-            <property name="text">
-             <string>Pre-Depends</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QLineEdit" name="LE_Conflicts">
-            <property name="placeholderText">
-             <string>Separated by commas</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QComboBox" name="ComboBox_Priority">
-            <property name="currentIndex">
-             <number>1</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>Required</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Standard</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Optional</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Extra</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="7" column="2">
-           <widget class="QLabel" name="LB_Replaces">
-            <property name="text">
-             <string>Replaces</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="LE_Maintainer">
-            <property name="placeholderText">
-             <string>fullname &amp; email</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="LB_HomePage">
-            <property name="text">
-             <string>Home Page</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="5">
+           <widget class="QLabel" name="LB_Arch">
+            <property name="text">
+             <string>Architecture</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
            <widget class="QComboBox" name="ComboBox_Arch">
             <item>
              <property name="text">
@@ -363,61 +329,13 @@ QLabel { image: url(:/icons/logo); }</string>
             </item>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="LB_Description">
+          <item row="1" column="0">
+           <widget class="QLabel" name="LB_Version">
             <property name="text">
-             <string>Description</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="LB_Depends">
-            <property name="text">
-             <string>Depends</string>
+             <string>Version</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1" colspan="5">
-           <widget class="QLineEdit" name="LE_PreDepends">
-            <property name="placeholderText">
-             <string>Separated by commas or '|'. Commas means &quot;AND&quot;, '|' means &quot;OR&quot;.</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="LE_Package">
-            <property name="placeholderText">
-             <string>Package name</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="LB_PackageType">
-            <property name="text">
-             <string>Package Type</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3" colspan="3">
-           <widget class="QLineEdit" name="LE_HomePage">
-            <property name="placeholderText">
-             <string>Home page</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1" colspan="5">
-           <widget class="QTextEdit" name="TE_Description">
-            <property name="placeholderText">
-             <string>Long description</string>
             </property>
            </widget>
           </item>
@@ -428,89 +346,58 @@ QLabel { image: url(:/icons/logo); }</string>
             </property>
            </widget>
           </item>
-          <item row="8" column="1">
-           <widget class="QLineEdit" name="LE_Provides">
-            <property name="placeholderText">
-             <string>Separated by commas</string>
+          <item row="1" column="4">
+           <widget class="QComboBox" name="ComboBox_Priority">
+            <property name="currentIndex">
+             <number>1</number>
             </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="LB_Summary">
-            <property name="text">
-             <string>Summary</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="LB_Priority">
-            <property name="text">
-             <string>Priority</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="LB_Provides">
-            <property name="text">
-             <string>Provides</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1" colspan="5">
-           <widget class="QLineEdit" name="LE_Depends">
-            <property name="placeholderText">
-             <string>Separated by commas or '|'. Commas means &quot;AND&quot;, '|' means &quot;OR&quot;.</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QLabel" name="LB_Arch">
-            <property name="text">
-             <string>Architecture</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="3" colspan="3">
-           <widget class="QLineEdit" name="LE_Replaces">
-            <property name="placeholderText">
-             <string>Separated by commas</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="LB_Maintainer">
-            <property name="text">
-             <string>Maintainer</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1" colspan="5">
-           <widget class="QLineEdit" name="LE_Summary">
-            <property name="placeholderText">
-             <string>Short description</string>
-            </property>
+            <item>
+             <property name="text">
+              <string>Required</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Standard</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Optional</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Extra</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="1" column="5">
+           <widget class="QLabel" name="LB_Section">
+            <property name="text">
+             <string>Section</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
            <widget class="QComboBox" name="ComboBox_Section">
             <property name="currentIndex">
-             <number>9</number>
+             <number>0</number>
             </property>
+            <item>
+             <property name="text">
+              <string>Admin</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Comm</string>
+             </property>
+            </item>
             <item>
              <property name="text">
               <string>Database</string>
@@ -518,7 +405,27 @@ QLabel { image: url(:/icons/logo); }</string>
             </item>
             <item>
              <property name="text">
+              <string>Debug</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Devel</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Doc</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>Editors</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Education</string>
              </property>
             </item>
             <item>
@@ -553,7 +460,37 @@ QLabel { image: url(:/icons/logo); }</string>
             </item>
             <item>
              <property name="text">
+              <string>Kernel</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>LibDevel</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Libs</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Localization</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>Mail</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Math</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>MetaPackages</string>
              </property>
             </item>
             <item>
@@ -573,7 +510,17 @@ QLabel { image: url(:/icons/logo); }</string>
             </item>
             <item>
              <property name="text">
+              <string>OtherOSFS</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>Science</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Shells</string>
              </property>
             </item>
             <item>
@@ -588,7 +535,17 @@ QLabel { image: url(:/icons/logo); }</string>
             </item>
             <item>
              <property name="text">
+              <string>Translations</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>Utils</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>VCS</string>
              </property>
             </item>
             <item>
@@ -603,13 +560,156 @@ QLabel { image: url(:/icons/logo); }</string>
             </item>
            </widget>
           </item>
-          <item row="1" column="4">
-           <widget class="QLabel" name="LB_Section">
+          <item row="2" column="0">
+           <widget class="QLabel" name="LB_Maintainer">
             <property name="text">
-             <string>Section</string>
+             <string>Maintainer</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="LE_Maintainer">
+            <property name="placeholderText">
+             <string>Fullname &amp; e-mail</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" colspan="2">
+           <widget class="QLabel" name="LB_HomePage">
+            <property name="text">
+             <string>Home Page</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4" colspan="3">
+           <widget class="QLineEdit" name="LE_HomePage">
+            <property name="placeholderText">
+             <string>Home page</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="LB_Summary">
+            <property name="text">
+             <string>Summary</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="6">
+           <widget class="QLineEdit" name="LE_Summary">
+            <property name="placeholderText">
+             <string>Short description</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="LB_Description">
+            <property name="text">
+             <string>Description</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" colspan="6">
+           <widget class="QTextEdit" name="TE_Description">
+            <property name="placeholderText">
+             <string>Long description</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="LB_Depends">
+            <property name="text">
+             <string>Depends</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1" colspan="6">
+           <widget class="QLineEdit" name="LE_Depends">
+            <property name="placeholderText">
+             <string>Separated by commas or '|'. Commas means &quot;AND&quot;, '|' means &quot;OR&quot;.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="LB_PreDepends">
+            <property name="text">
+             <string>Pre-Depends</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1" colspan="6">
+           <widget class="QLineEdit" name="LE_PreDepends">
+            <property name="placeholderText">
+             <string>Separated by commas or '|'. Commas means &quot;AND&quot;, '|' means &quot;OR&quot;.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="LB_Conflicts">
+            <property name="text">
+             <string>Conflicts</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLineEdit" name="LE_Conflicts">
+            <property name="placeholderText">
+             <string>Separated by commas</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="2">
+           <widget class="QLabel" name="LB_Replaces">
+            <property name="text">
+             <string>Replaces</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="3" colspan="4">
+           <widget class="QLineEdit" name="LE_Replaces">
+            <property name="placeholderText">
+             <string>Separated by commas</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="LB_Provides">
+            <property name="text">
+             <string>Provides</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QLineEdit" name="LE_Provides">
+            <property name="placeholderText">
+             <string>Separated by commas</string>
             </property>
            </widget>
           </item>
@@ -630,6 +730,367 @@ QLabel { image: url(:/icons/logo); }</string>
             </property>
            </widget>
           </item>
+          <item row="1" column="2" colspan="2">
+           <widget class="QLabel" name="LB_Priority">
+            <property name="text">
+             <string>Priority</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_signature">
+         <attribute name="title">
+          <string>Signature</string>
+         </attribute>
+         <layout class="QGridLayout" name="GL_Tab_Signature">
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="GB_Signature_Main">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+	border: 1px solid #bdc3c7;
+	border-radius: 3px;
+	margin-top: 1.4ex;
+	left: 10px;
+	padding: 6px;
+}
+QGroupBox::title {
+	subcontrol-origin: margin;
+	subcontrol-position: top left;
+	left: 10px;
+	padding: 0 3px;
+}</string>
+            </property>
+            <property name="title">
+             <string>GPG Signature</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <layout class="QVBoxLayout" name="VL_Signature_Main">
+             <item>
+              <widget class="QGroupBox" name="GB_Signature_Keys">
+               <property name="title">
+                <string>Secret Keys</string>
+               </property>
+               <layout class="QVBoxLayout" name="VL_Signature_SecretKeys">
+                <item>
+                 <layout class="QHBoxLayout" name="HL_SignKeys">
+                  <item>
+                   <widget class="QLabel" name="LB_GPG_Key">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>GPG Key</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="ComboBox_GPG_Keys">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="HS_GPG_Key">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="GL_SignKeyInfo">
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="LB_SignUserIDLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>User ID</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Private Key ID</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="LB_SignKeyID">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="LB_SignKeyIDLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Public Key ID</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLabel" name="LB_SignUserID">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="GB_Signature_Import">
+               <property name="title">
+                <string>Import Secret Keys</string>
+               </property>
+               <layout class="QGridLayout" name="GL_Signature_ImportKeys">
+                <item row="0" column="0">
+                 <layout class="QGridLayout" name="GL_SignImportMain">
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="LB_SignPubKey">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Public Key</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="LE_SignPubKey"/>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="LB_SignPrivKey">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Private Key</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QPushButton" name="PB_SignPrivKeyBrowse">
+                    <property name="text">
+                     <string>Browse</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QPushButton" name="PB_SignPubKeyBrowse">
+                    <property name="text">
+                     <string>Browse</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLineEdit" name="LE_SignPrivKey"/>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QPushButton" name="PB_SignImport">
+                    <property name="focusPolicy">
+                     <enum>Qt::NoFocus</enum>
+                    </property>
+                    <property name="text">
+                     <string>Import</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="GB_FileSignature">
+               <property name="title">
+                <string>File Signature</string>
+               </property>
+               <layout class="QVBoxLayout" name="VL_Signature_File">
+                <item>
+                 <layout class="QHBoxLayout" name="HL_FileSignPath">
+                  <item>
+                   <widget class="QLabel" name="LB_SignFileName">
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>File Name</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="LE_SignFilePath">
+                    <property name="placeholderText">
+                     <string>File absolute path</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="PB_SignFileBrowse">
+                    <property name="focusPolicy">
+                     <enum>Qt::NoFocus</enum>
+                    </property>
+                    <property name="text">
+                     <string>Browse</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="HL_FileSignOptions">
+                  <item>
+                   <widget class="QCheckBox" name="CB_Sign_Detached">
+                    <property name="focusPolicy">
+                     <enum>Qt::NoFocus</enum>
+                    </property>
+                    <property name="text">
+                     <string>Detached signature</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="HL_FileSignExtOpts">
+                    <item>
+                     <widget class="QLabel" name="LB_Sign_GPG_ExOptions">
+                      <property name="text">
+                       <string>Extra gpg arguments</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="LE_Sign_GPG_ExOptions"/>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <spacer name="VS_Signature_Main">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
         <widget class="QWidget" name="tab_scripts">
@@ -642,7 +1103,7 @@ QLabel { image: url(:/icons/logo); }</string>
          <attribute name="title">
           <string>Scripts</string>
          </attribute>
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QGridLayout" name="GL_Tab_Scripts">
           <item row="0" column="0">
            <widget class="QTabWidget" name="tabWidget_scripts">
             <property name="currentIndex">
@@ -652,7 +1113,7 @@ QLabel { image: url(:/icons/logo); }</string>
              <attribute name="title">
               <string>Pre-Install</string>
              </attribute>
-             <layout class="QGridLayout" name="gridLayout_3">
+             <layout class="QGridLayout" name="GL_Tab_ScriptPreinst">
               <item row="0" column="0">
                <widget class="QTextEdit" name="TE_PreInst"/>
               </item>
@@ -662,7 +1123,7 @@ QLabel { image: url(:/icons/logo); }</string>
              <attribute name="title">
               <string>Post-Install</string>
              </attribute>
-             <layout class="QGridLayout" name="gridLayout_4">
+             <layout class="QGridLayout" name="GL_Tab_ScriptPostInst">
               <item row="0" column="0">
                <widget class="QTextEdit" name="TE_PostInst"/>
               </item>
@@ -672,7 +1133,7 @@ QLabel { image: url(:/icons/logo); }</string>
              <attribute name="title">
               <string>Pre-Remove</string>
              </attribute>
-             <layout class="QGridLayout" name="gridLayout_5">
+             <layout class="QGridLayout" name="GL_Tab_ScriptPrerm">
               <item row="0" column="0">
                <widget class="QTextEdit" name="TE_PreRM"/>
               </item>
@@ -682,7 +1143,7 @@ QLabel { image: url(:/icons/logo); }</string>
              <attribute name="title">
               <string>Post-Remove</string>
              </attribute>
-             <layout class="QGridLayout" name="gridLayout_6">
+             <layout class="QGridLayout" name="GL_Tab_ScriptPostrm">
               <item row="0" column="0">
                <widget class="QPlainTextEdit" name="TE_PostRM"/>
               </item>
@@ -696,7 +1157,7 @@ QLabel { image: url(:/icons/logo); }</string>
          <attribute name="title">
           <string>Files</string>
          </attribute>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QVBoxLayout" name="VL_Tab_Files">
           <item>
            <layout class="QHBoxLayout" name="HL_FilesToolbar">
             <property name="spacing">
@@ -827,39 +1288,6 @@ QToolButton { border: none; }</string>
           </item>
          </layout>
         </widget>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="HL_Bottom_ButtonBox">
-      <item>
-       <spacer name="HS_Bottom_ButtonBox">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="PB_Build">
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Start Build</string>
-        </property>
-        <property name="text">
-         <string>Build</string>
-        </property>
        </widget>
       </item>
      </layout>

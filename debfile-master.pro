@@ -43,6 +43,7 @@ SOURCES += \
     FileSystemModel.cpp \
     FileSystemWorkThread.cpp \
     main.cpp \
+    signature.cpp \
     utils.cpp \
     MainWindow.cpp \
     DEBFile.cpp
@@ -50,6 +51,7 @@ SOURCES += \
 HEADERS += \
     FileSystemModel.h \
     FileSystemWorkThread.h \
+    signature.h \
     utils.h \
     MainWindow.h \
     DEBFile.h
