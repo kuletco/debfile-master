@@ -39,8 +39,13 @@ private slots:
     void work_failed();
     void work_update(QString info);
     void copy_progress(const QString &file, quint64 copied, quint64 count);
+    void init_fsmodel();
+    void clear_fsmodel();
 
     // UI Slots
+    void clear_file_treeview();
+    void clear_buildroot();
+    void change_buildroot(const QString &buildroot);
     void fsmodel_RootPathChanged(const QString &newPath);
     void fsmodel_DirectoryLoaded(const QString &path);
     void on_tabWidget_Main_currentChanged(int index);

@@ -37,11 +37,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) , ui(new Ui::MainW
     connect(m_deb, SIGNAL(buildroot_cleared()), this, SLOT(clear_buildroot()));
     connect(m_deb, SIGNAL(buildroot_changed(QString)), this, SLOT(change_buildroot(QString)));
 
-    m_fsmodel = new FileSystemModel();
-    connect(m_fsmodel, SIGNAL(rootPathChanged(QString)), this, SLOT(fsmodel_RootPathChanged(QString)));
-    connect(m_fsmodel, SIGNAL(directoryLoaded(QString)), this, SLOT(fsmodel_DirectoryLoaded(QString)));
-    connect(m_fsmodel, SIGNAL(copy_work_progress_count(QString,quint64,quint64)), this, SLOT(copy_progress(QString,quint64,quint64)));
-    ui->treeView_Files->setModel(m_fsmodel);
+    // Files TreeView Settings
     ui->treeView_Files->setEditTriggers(QTreeView::EditKeyPressed);
     ui->treeView_Files->setExpandsOnDoubleClick(true);
 //    ui->treeView_Files->header()->setStretchLastSection(false);
@@ -127,7 +123,58 @@ void MainWindow::copy_progress(const QString &file, quint64 copied, quint64 coun
     }
 }
 
+void MainWindow::init_fsmodel()
+{
+    clear_fsmodel();
+    m_fsmodel = new FileSystemModel();
+    connect(m_fsmodel, SIGNAL(rootPathChanged(QString)), this, SLOT(fsmodel_RootPathChanged(QString)));
+    connect(m_fsmodel, SIGNAL(directoryLoaded(QString)), this, SLOT(fsmodel_DirectoryLoaded(QString)));
+    connect(m_fsmodel, SIGNAL(copy_work_progress_count(QString,quint64,quint64)), this, SLOT(copy_progress(QString,quint64,quint64)));
+    ui->treeView_Files->setModel(m_fsmodel);
+}
+
+void MainWindow::clear_fsmodel()
+{
+    if (!m_fsmodel.isNull()) {
+        clear_file_treeview();
+
+//        m_fsmodel->setRootPath("");
+//        m_fsmodel->setReadOnly(true);
+        m_fsmodel->disconnect();
+        delete m_fsmodel;
+    }
+}
+
 // UI Slots
+void MainWindow::clear_file_treeview()
+{
+    ui->treeView_Files->setModel(nullptr);
+    ui->treeView_Files->reset();
+}
+
+void MainWindow::clear_buildroot()
+{
+    if (!m_fsmodel.isNull()) {
+        clear_file_treeview();
+    }
+}
+
+void MainWindow::change_buildroot(const QString &buildroot)
+{
+    qDebug().noquote() << "Change BuildRoot:" << buildroot;
+    if (m_fsmodel.isNull()) {
+        init_fsmodel();
+    }
+    if (m_fsmodel->rootPath().isEmpty() || (m_fsmodel->rootPath() != buildroot)) {
+        qDebug().noquote() << "Build Root:" << buildroot;
+        m_fsmodel->setRootPath(buildroot);
+        m_fsmodel->setReadOnly(false);
+        ui->treeView_Files->setRootIndex(m_fsmodel->index(buildroot));
+        ui->treeView_Files->selectionModel()->setCurrentIndex(m_fsmodel->index(buildroot), QItemSelectionModel::Select);
+        ui->treeView_Files->resizeColumnToContents(3);
+    }
+}
+
 void MainWindow::fsmodel_RootPathChanged(const QString &newPath)
 {
     Q_UNUSED(newPath)
@@ -149,14 +196,7 @@ void MainWindow::on_tabWidget_Main_currentChanged(int index)
     case Pages::Information: break;
     case Pages::Scripts: break;
     case Pages::Files: {
-        if (m_fsmodel->rootPath().isEmpty() || (m_fsmodel->rootPath() != m_deb->buildroot())) {
-            qDebug().noquote() << "Build Root:" << m_deb->buildroot();
-            m_fsmodel->setRootPath(m_deb->buildroot());
-            m_fsmodel->setReadOnly(false);
-            ui->treeView_Files->setRootIndex(m_fsmodel->index(m_deb->buildroot()));
-            ui->treeView_Files->selectionModel()->setCurrentIndex(m_fsmodel->index(m_deb->buildroot()), QItemSelectionModel::Select);
-            ui->treeView_Files->resizeColumnToContents(3);
-        }
+        change_buildroot(m_deb->buildroot());
         break;
     }
     default: break;
