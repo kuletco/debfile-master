@@ -61,5 +61,6 @@ private:
     QPointer<QTimer> m_date_updater;
     QPointer<DEBFile> m_deb;
     QPointer<FileSystemModel> m_fsmodel;
+    QString m_debfile;
 };
 #endif // MAINWINDOW_H

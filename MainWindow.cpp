@@ -267,9 +267,9 @@ void MainWindow::on_PB_Build_clicked()
     }
 
     // Popup a dialog to save deb file
-    QString filename = QFileDialog::getSaveFileName(this, tr("Save File"), QDir::homePath() + "/" + m_deb->filename(), tr("Debian Package (*.deb *.udeb)"));
-    qDebug().noquote() << "Package File:" << filename;
-    m_deb->CreatePackage(filename);
+    m_debfile = QFileDialog::getSaveFileName(this, tr("Save File"), QDir::homePath() + "/" + m_deb->filename(), tr("Debian Package (*.deb *.udeb)"));
+    qDebug().noquote() << "Package File:" << m_debfile;
+    m_deb->CreatePackage(m_debfile);
 }
 
 void MainWindow::on_TB_Add_Dir_clicked()
