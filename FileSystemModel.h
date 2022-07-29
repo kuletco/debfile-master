@@ -1,6 +1,7 @@
 #ifndef FILESYSTEMMODEL_H
 #define FILESYSTEMMODEL_H
 
+#include "qglobal.h"
 #include <QObject>
 #include <QPointer>
 #include <QMetaType>
@@ -41,6 +42,11 @@ public:
     explicit FileSystemModel(QObject *parent = nullptr);
     ~FileSystemModel();
 
+    quint64 files() const { return m_sources_count; }
+    quint64 entrysize() const { return m_sources_bytes; }
+
+    void calc(const QString &src);
+
     void copy(const QString &src, const QString &dest, bool overwrite = false);
 
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -55,17 +61,18 @@ protected:
     QFile::Permissions str2permission(const QString &str) const;
 
 private slots:
-    void work_thread_finished();
+    void work_thread_finished(FileSystemWorkThread::WorkType type);
 
 signals:
+    void do_calc(const QString &src);
     void do_copy(const QString &src, const QString &dest, bool overwrite);
     void copy_work_progress_count(const QString &file, quint64 copied, quint64 count);
     void copy_work_progress_bytes(const QString &file, quint64 copied, quint64 totalsize);
     void copy_work_finished();
 
 private:
-    quint64 m_copy_bytes;
-    quint64 m_copy_count;
+    quint64 m_sources_bytes;
+    quint64 m_sources_count;
     quint64 m_copied_bytes;
     quint64 m_copied_count;
 

@@ -228,6 +228,7 @@ void MainWindow::on_PB_Build_clicked()
     m_deb->m_contents_postinst = ui->TE_PostInst->toPlainText();
     m_deb->m_contents_prerm = ui->TE_PreRM->toPlainText();
     m_deb->m_contents_postrm = ui->TE_PostRM->toPlainText();
+    m_deb->m_installed_size = m_fsmodel->entrysize();
 
     if (m_deb->m_name.isEmpty()) {
         ui->statusbar->showMessage(tr("Package name is empty!"));

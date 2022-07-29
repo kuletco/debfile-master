@@ -10,8 +10,11 @@ QDir::Filters G_QDir_Filters = QDir::AllEntries | QDir::System | QDir::Hidden | 
 
 FileSystemWorkThread::FileSystemWorkThread(QObject *parent) : QObject(parent)
 {
-    m_copy_bytes = 0;
-    m_copy_count = 0;
+    RegisterMetaTypes(FileSystemWorkThread::WorkType);
+
+    m_current_work = WorkType::WT_None;
+    m_sources_bytes = 0;
+    m_sources_count = 0;
     m_copied_bytes = 0;
     m_copied_count = 0;
 }
@@ -35,7 +38,6 @@ quint64 FileSystemWorkThread::updateFileList(const QString &dir)
         m_linklist.append(top);
     } else if (top.isFile()) {
         m_filelist.append(top);
-        bytes += top.size();
     } else if (top.isDir()) {
         m_dirlist.append(top);
         QDir top_dir(top.absoluteFilePath());
@@ -45,12 +47,25 @@ quint64 FileSystemWorkThread::updateFileList(const QString &dir)
             bytes += updateFileList(node.absoluteFilePath());
         }
     }
+    bytes += top.size();
 
     return bytes;
 }
 
+void FileSystemWorkThread::update(const QString &src)
+{
+    m_current_work = WorkType::WT_Calc;
+
+    m_sources_bytes = updateFileList(src);
+    m_sources_count = m_entries.size();
+
+    emit work_finished(m_current_work);
+}
+
 void FileSystemWorkThread::list(const QString &src)
 {
+    m_current_work = WorkType::WT_List;
+
     qDebug().noquote() << "ThreadID:" << QThread::currentThreadId() << "Func:" << __FUNCTION__;
     updateFileList(src);
     qDebug().noquote() << "Files:";
@@ -58,16 +73,18 @@ void FileSystemWorkThread::list(const QString &src)
         qDebug().noquote() << "  " << node.absoluteFilePath();
     }
     qDebug().noquote() << "Total:" << m_filelist.size() << "Files," << m_dirlist.size() << "Directories," << m_linklist.size() << "Links";
-    emit all_finished();
+
+    emit work_finished(m_current_work);
 }
 
 void FileSystemWorkThread::copy(const QString &src, const QString &dest, bool overwrite)
 {
-    m_copy_bytes = updateFileList(src);
-    m_copy_count = m_filelist.size();
-    qDebug().noquote() << "ThreadID:" << QThread::currentThreadId() << "Func:" << __FUNCTION__ << "TotalFiles:" << m_copy_count << "TotalBytes:" << m_copy_bytes;
+    update(src);
+    qDebug().noquote() << "ThreadID:" << QThread::currentThreadId() << "Func:" << __FUNCTION__ << "TotalFiles:" << m_sources_count << "TotalBytes:" << m_sources_bytes;
     qDebug().noquote() << "Copy:" << "Source:" << src;
     qDebug().noquote() << "     " << "  Dest:" << dest;
+
+    m_current_work = WorkType::WT_Copy;
 
     m_copied_bytes = 0;
     m_copied_count = 0;
@@ -86,7 +103,6 @@ void FileSystemWorkThread::copy(const QString &src, const QString &dest, bool ov
     }
     qDebug().noquote() << "BaseDir:" << basedir;
 
-    // FIXME: 未获取目标文件的相对路径
     qDebug().noquote()<< "DestDir:" << dest_dir.absolutePath();
     for (const QFileInfo &entry : qAsConst(m_entries)) {
         QString source = entry.absoluteFilePath();
@@ -152,8 +168,9 @@ void FileSystemWorkThread::copy(const QString &src, const QString &dest, bool ov
         }
         m_copied_count++;
         m_copied_bytes += entry.size();
-        emit progress_count(entry.absoluteFilePath(), m_copied_count, m_copy_count);
-        emit progress_bytes(entry.absoluteFilePath(), m_copied_bytes, m_copy_bytes);
+        emit progress_count(entry.absoluteFilePath(), m_copied_count, m_sources_count);
+        emit progress_bytes(entry.absoluteFilePath(), m_copied_bytes, m_sources_bytes);
     }
-    emit all_finished();
+
+    emit work_finished(m_current_work);
 }

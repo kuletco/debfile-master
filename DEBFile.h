@@ -97,6 +97,7 @@ public:
     QString m_conflicts;
     QString m_replaces;
     QString m_provides;
+    quint64 m_installed_size;
     bool m_protected;
     DEBAttrs::Type m_type;
     DEBAttrs::Architecture m_architecture;

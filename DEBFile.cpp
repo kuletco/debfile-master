@@ -6,6 +6,7 @@
 
 DEBFile::DEBFile(QObject *parent) : QObject{parent}, m_worker{new QProcess()}
 {
+    m_installed_size = 100;
     m_protected = false;
     m_type = DEBAttrs::Type::deb;
     m_architecture = DEBAttrs::Architecture::all;
@@ -134,7 +135,8 @@ qint64 DEBFile::CreateControlFile()
     QStringList contents;
     contents << QString("Package: %1").arg(m_name);
     contents << QString("Version: %1").arg(m_version);
-    contents << QString("Size: 100");
+    // Installed-Size Unit is KiB (https://manpages.debian.org/testing/dpkg-dev/deb-control.5.en.html#Installed-Size:).
+    contents << QString("Installed-Size: %1").arg(QString::number(m_installed_size / 1024));
     if (m_architecture != DEBAttrs::Architecture::invalid)
         contents << QString("Architecture: %1").arg(Utils::EnumConvert(m_architecture).constData());
     if (m_section != DEBAttrs::Section::invalid)

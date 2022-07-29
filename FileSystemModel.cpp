@@ -7,8 +7,8 @@
 
 FileSystemModel::FileSystemModel(QObject *parent) : QFileSystemModel{parent}
 {
-    m_copy_bytes = 0;
-    m_copy_count = 0;
+    m_sources_bytes = 0;
+    m_sources_count = 0;
     m_copied_bytes = 0;
     m_copied_count = 0;
 
@@ -16,9 +16,10 @@ FileSystemModel::FileSystemModel(QObject *parent) : QFileSystemModel{parent}
     m_worker = new FileSystemWorkThread();
     m_worker->moveToThread(&m_thread);
     connect(&m_thread, SIGNAL(finished()), this, SLOT(work_thread_finished()));
-    connect(m_worker, SIGNAL(all_finished()), this, SLOT(work_thread_finished()));
+    connect(m_worker, SIGNAL(work_finished(FileSystemWorkThread::WorkType)), this, SLOT(work_thread_finished(FileSystemWorkThread::WorkType)));
     connect(m_worker, SIGNAL(progress_count(QString,quint64,quint64)), this, SIGNAL(copy_work_progress_count(QString,quint64,quint64)));
     connect(m_worker, SIGNAL(progress_bytes(QString,quint64,quint64)), this, SIGNAL(copy_work_progress_bytes(QString,quint64,quint64)));
+    connect(this, SIGNAL(do_calc(QString)), m_worker, SLOT(calc(QString)));
     connect(this, SIGNAL(do_copy(QString,QString,bool)), m_worker, SLOT(copy(QString,QString,bool)));
     m_thread.start();
 
@@ -78,10 +79,28 @@ QFile::Permissions FileSystemModel::str2permission(const QString &str) const
     return permissions;
 }
 
-void FileSystemModel::work_thread_finished()
+void FileSystemModel::work_thread_finished(FileSystemWorkThread::WorkType type)
 {
     qDebug().noquote() << "WorkFinished!";
-    emit copy_work_finished();
+    switch (type) {
+    case FileSystemWorkThread::WorkType::WT_Calc:
+        qDebug().noquote() << "Calc finished!" << "Entry Count:" << m_sources_count << "Size:" << m_sources_bytes;
+        m_sources_count = m_worker->files();
+        m_sources_bytes = m_worker->entrysize();
+        break;
+    case FileSystemWorkThread::WorkType::WT_Copy:
+        emit copy_work_finished();
+        break;
+    default:
+        break;
+    }
+}
+
+void FileSystemModel::calc(const QString &src)
+{
+    if (m_sources_bytes == 0 || m_sources_count == 0) {
+        emit do_calc(src);
+    }
 }
 
 void FileSystemModel::copy(const QString &src, const QString &dest, bool overwrite)
