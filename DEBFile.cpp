@@ -160,8 +160,12 @@ qint64 DEBFile::CreateControlFile()
     if (!m_summary.isEmpty())
         contents << QString("Description: %1").arg(m_summary);
     // TODO: Need format long-description contents (https://manpages.debian.org/testing/dpkg-dev/deb-control.5.en.html#Description:)
-    if (!m_description.isEmpty())
-        contents << QString(" %1").arg(m_description);
+    if (!m_description.isEmpty()) {
+        QStringList descriptions = m_description.split("\n");
+        for (const QString &desc : qAsConst(descriptions)) {
+            contents << QString(" %1").arg(desc);
+        }
+    }
 
     contents << "";
     m_contents_control = contents.join("\n").toUtf8();
