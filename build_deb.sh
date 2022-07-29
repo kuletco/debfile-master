@@ -58,11 +58,13 @@ function UpdateValue()
 PKG_NAME=$(grep "Package" $CONTROL_FILE | awk '{print $2}')
 PKG_VER=$(grep '^VERSION' $TARGET.pro | awk '{print $3}')
 PKG_ARCH=$(dpkg --print-architecture)
+PKG_SIZE=$(du -sk $BUILD_DIR | awk '{print $1}')
 
 UpdateValue $DESKTOP_FILE "=" "Version" "$PKG_VER"
 UpdateValue $CONTROL_FILE ":\ " "Version" "$PKG_VER"
 UpdateValue $CONTROL_FILE ":\ " "Architecture" "$PKG_ARCH"
+UpdateValue $CONTROL_FILE ":\ " "Installed-Size" "$PKG_SIZE"
 
 # Build Package
-fakeroot dpkg-deb -b $BUILD_DIR ${PKG_NAME}_${PKG_VER}_${PKG_ARCH}.deb || exit $?
+fakeroot dpkg-deb -b ${BUILD_DIR} ${PKG_NAME}_${PKG_VER}_${PKG_ARCH}.deb || exit $?
 rm -rf $BUILD_DIR
