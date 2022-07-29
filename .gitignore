@@ -61,6 +61,8 @@ compile_commands.json
 .qmake.stash
 debfile-master
 *.deb
+DEBTEMP.*/
+test/
 
 # Users files
 /Maintainer
