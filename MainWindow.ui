@@ -749,6 +749,9 @@ QLabel { image: url(:/icons/logo); }</string>
          <layout class="QGridLayout" name="GL_Tab_Signature">
           <item row="0" column="0">
            <widget class="QGroupBox" name="GB_Signature_Main">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1115,7 +1118,7 @@ QGroupBox::title {
              </attribute>
              <layout class="QGridLayout" name="GL_Tab_ScriptPreinst">
               <item row="0" column="0">
-               <widget class="QTextEdit" name="TE_PreInst"/>
+               <widget class="QPlainTextEdit" name="TE_PreInst"/>
               </item>
              </layout>
             </widget>
@@ -1125,7 +1128,7 @@ QGroupBox::title {
              </attribute>
              <layout class="QGridLayout" name="GL_Tab_ScriptPostInst">
               <item row="0" column="0">
-               <widget class="QTextEdit" name="TE_PostInst"/>
+               <widget class="QPlainTextEdit" name="TE_PostInst"/>
               </item>
              </layout>
             </widget>
@@ -1135,7 +1138,7 @@ QGroupBox::title {
              </attribute>
              <layout class="QGridLayout" name="GL_Tab_ScriptPrerm">
               <item row="0" column="0">
-               <widget class="QTextEdit" name="TE_PreRM"/>
+               <widget class="QPlainTextEdit" name="TE_PreRM"/>
               </item>
              </layout>
             </widget>
