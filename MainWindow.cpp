@@ -7,8 +7,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include "utils.h"
-
 #define DEBUG_MODE
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) , ui(new Ui::MainWindow)
