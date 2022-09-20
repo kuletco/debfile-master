@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <unistd.h>
 #include "FileSystemModel.h"
+#include "FileSystemWorkThread.h"
 #include "qnamespace.h"
 
 #define NO_PERMISSION_STR  "---------"
@@ -19,7 +20,7 @@ FileSystemModel::FileSystemModel(QObject *parent) : QFileSystemModel{parent}
     connect(m_worker, SIGNAL(work_finished(FileSystemWorkThread::WorkType)), this, SLOT(work_thread_finished(FileSystemWorkThread::WorkType)));
     connect(m_worker, SIGNAL(progress_count(QString,quint64,quint64)), this, SIGNAL(copy_work_progress_count(QString,quint64,quint64)));
     connect(m_worker, SIGNAL(progress_bytes(QString,quint64,quint64)), this, SIGNAL(copy_work_progress_bytes(QString,quint64,quint64)));
-    connect(this, SIGNAL(do_calc(QString)), m_worker, SLOT(calc(QString)));
+    connect(this, SIGNAL(do_calc(QString)), m_worker, SLOT(update(QString)));
     connect(this, SIGNAL(do_copy(QString,QString,bool)), m_worker, SLOT(copy(QString,QString,bool)));
     m_thread.start();
 
@@ -77,6 +78,11 @@ QFile::Permissions FileSystemModel::str2permission(const QString &str) const
     if (str.at(8) == 'r') { permissions |= QFile::Permission::ExeOther; }
 
     return permissions;
+}
+
+void FileSystemModel::work_thread_finished()
+{
+    work_thread_finished(FileSystemWorkThread::WorkType::WT_All);
 }
 
 void FileSystemModel::work_thread_finished(FileSystemWorkThread::WorkType type)

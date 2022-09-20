@@ -61,6 +61,7 @@ protected:
     QFile::Permissions str2permission(const QString &str) const;
 
 private slots:
+    void work_thread_finished();
     void work_thread_finished(FileSystemWorkThread::WorkType type);
 
 signals:

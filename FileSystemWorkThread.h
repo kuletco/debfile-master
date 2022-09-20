@@ -18,6 +18,7 @@ public:
         WT_List,
         WT_Calc,
         WT_Copy,
+        WT_All,
 
         Invalid = -1,
     };
