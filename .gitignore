@@ -58,6 +58,7 @@ compile_commands.json
 /.build_deb
 /.qtc_clangd
 /.clangd
+/.vscode
 .qmake.stash
 debfile-master
 *.deb
