@@ -149,16 +149,20 @@ qint64 DEBFile::CreateControlFile()
         contents << QString("Maintainer: %1").arg(m_maintainer);
     if (!m_homepage.isEmpty())
         contents << QString("Homepage: %1").arg(m_homepage);
+    if (!m_provides.isEmpty())
+        contents << QString("Provides: %1").arg(m_provides);
     if (!m_predepends.isEmpty())
         contents << QString("Pre-Depends: %1").arg(m_predepends);
     if (!m_depends.isEmpty())
         contents << QString("Depends: %1").arg(m_depends);
+    if (!m_recommends.isEmpty())
+        contents << QString("Recommends: %1").arg(m_recommends);
+    if (!m_suggests.isEmpty())
+        contents << QString("Suggests: %1").arg(m_suggests);
     if (!m_conflicts.isEmpty())
         contents << QString("Conflicts: %1").arg(m_conflicts);
     if (!m_replaces.isEmpty())
         contents << QString("Replaces: %1").arg(m_replaces);
-    if (!m_provides.isEmpty())
-        contents << QString("Provides: %1").arg(m_provides);
     if (!m_summary.isEmpty())
         contents << QString("Description: %1").arg(m_summary);
     // TODO: Need format long-description contents (https://manpages.debian.org/testing/dpkg-dev/deb-control.5.en.html#Description:)
@@ -203,7 +207,7 @@ void DEBFile::CreatePackage(const QString &debfile)
 {
     m_file = debfile;
     QStringList args;
-    args << "/usr/bin/dpkg-deb" << "--build" << m_buildroot << m_file;
+    args << "/usr/bin/dpkg-deb" << "-Z" << Utils::EnumConvert(m_compresstype) << "--build" << m_buildroot << m_file;
     m_worker->start("/usr/bin/fakeroot", args);
 }
 

@@ -4,6 +4,7 @@
 #include <QProcess>
 #include <stdlib.h>
 
+#include "DEBFile.h"
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
@@ -212,8 +213,10 @@ void MainWindow::on_PB_Build_clicked()
     m_deb->m_homepage = ui->LE_HomePage->text();
     m_deb->m_summary = ui->LE_Summary->text();
     m_deb->m_description = ui->TE_Description->toPlainText();
-    m_deb->m_depends = ui->LE_Depends->text();
     m_deb->m_predepends = ui->LE_PreDepends->text();
+    m_deb->m_depends = ui->LE_Depends->text();
+    m_deb->m_recommends = ui->LE_Recommends->text();
+    m_deb->m_suggests = ui->LE_Suggest->text();
     m_deb->m_conflicts = ui->LE_Conflicts->text();
     m_deb->m_replaces = ui->LE_Replaces->text();
     m_deb->m_provides = ui->LE_Provides->text();
@@ -222,6 +225,7 @@ void MainWindow::on_PB_Build_clicked()
     m_deb->m_architecture = static_cast<DEBAttrs::Architecture>(ui->ComboBox_Arch->currentIndex());
     m_deb->m_priority = static_cast<DEBAttrs::Priority>(ui->ComboBox_Priority->currentIndex());
     m_deb->m_section = static_cast<DEBAttrs::Section>(ui->ComboBox_Section->currentIndex());
+    m_deb->m_compresstype = static_cast<DEBAttrs::CompressTyp>(ui->ComboBox_CompressType->currentIndex());
     m_deb->m_contents_preinst = ui->TE_PreInst->toPlainText();
     m_deb->m_contents_postinst = ui->TE_PostInst->toPlainText();
     m_deb->m_contents_prerm = ui->TE_PreRM->toPlainText();

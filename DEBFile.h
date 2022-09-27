@@ -79,6 +79,15 @@ namespace DEBAttrs
         invalid = -1,
     };
     Q_ENUM_NS(Section)
+
+    enum class CompressTyp {
+        zstd,
+        xz,
+        gzip,
+        none,
+        invalid = -1,
+    };
+    Q_ENUM_NS(CompressTyp)
 } // namespace DEBAttrs
 
 class DEBFile : public QObject
@@ -92,8 +101,10 @@ public:
     QString m_homepage;
     QString m_summary;
     QString m_description;
-    QString m_depends;
     QString m_predepends;
+    QString m_depends;
+    QString m_recommends;
+    QString m_suggests;
     QString m_conflicts;
     QString m_replaces;
     QString m_provides;
@@ -103,6 +114,7 @@ public:
     DEBAttrs::Architecture m_architecture;
     DEBAttrs::Priority m_priority;
     DEBAttrs::Section m_section;
+    DEBAttrs::CompressTyp m_compresstype;
 
     QString m_contents_control;
     QString m_contents_preinst;
